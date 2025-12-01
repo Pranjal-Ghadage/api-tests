@@ -1,0 +1,16 @@
+{
+  "id": "employee-env-001",
+  "name": "EmployeeEnvironment",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "https://dummy.restapiexample.com/api/v1/",
+      "enabled": true
+    },
+    {
+      "key": "id",
+      "value": "1",
+      "enabled": true
+    }
+  ]
+}

@@ -1,0 +1,379 @@
+{
+	"info": {
+		"_postman_id": "daad4c10-522d-418e-a63c-3f04a36af342",
+		"name": "employee",
+		"description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47781331",
+		"_collection_link": "https://ghadagepranjal202-4592384.postman.co/workspace/pranjal-ghadage's-Workspace~927017f8-b3bb-4470-8651-aff11f774d34/collection/47781331-daad4c10-522d-418e-a63c-3f04a36af342?action=share&source=collection_link&creator=47781331"
+	},
+	"item": [
+		{
+			"name": "employ data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let json={};\r",
+							"try{\r",
+							"    json=pm.response.json();\r",
+							"}\r",
+							"catch(e)\r",
+							"{\r",
+							"    console.log(e);\r",
+							"}\r",
+							"pm.test(\"status code\",()=>{\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"pm.test(\"Content-Type header is application/json\", () => {\r",
+							"    pm.expect(pm.response.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+							"});\r",
+							"pm.test(\"response time\", () => {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(900);\r",
+							"});\r",
+							"pm.test(\"status msg\", () => {\r",
+							"    pm.expect(json).to.have.property(\"status\");\r",
+							"    pm.expect(json.status).to.be.a(\"string\").and.to.not.be.empty;\r",
+							"});\r",
+							"pm.test(\"message\", () => {\r",
+							"    pm.expect(json.message).to.be.a(\"string\").and.to.not.be.empty;\r",
+							"    pm.expect(json.message.toLowerCase()).to.include(\"successfully\");\r",
+							"});\r",
+							"pm.test(\"data is array\", () => {\r",
+							"    pm.expect(json).to.have.property(\"data\");\r",
+							"    pm.expect(json.data).to.be.an(\"array\");\r",
+							"    \r",
+							"});\r",
+							"\r",
+							"pm.test(\"String fields validation\", () => {\r",
+							"    const stringFields = [\"employee_name\",\"employee_salary\",\"employee_age\" ];\r",
+							"\r",
+							"    json.data.forEach((employee) => {\r",
+							"        pm.expect(employee).to.have.property(\"id\");\r",
+							"        pm.expect(employee.id).to.be.a(\"number\");\r",
+							"    \r",
+							"    stringFields.forEach(field => {\r",
+							"        pm.expect(employee[field]).to.be.a(\"string\").and.to.not.be.empty;  \r",
+							"    });\r",
+							"    });\r",
+							"});\r",
+							"pm.test(\"Profile image is a string (can be empty)\", () => {\r",
+							"    json.data.forEach(employee => {\r",
+							"        pm.expect(employee.profile_image).to.be.a(\"string\");\r",
+							"        // optional: check length >= 0 (allows empty string)\r",
+							"        pm.expect(employee.profile_image.length >= 0).to.be.true;\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}employees",
+					"host": [
+						"{{baseUrl}}employees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "single employ data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let json = {};\r",
+							"try {\r",
+							"    json = pm.response.json();\r",
+							"} catch (e) {\r",
+							"    console.log(e);\r",
+							"}\r",
+							"\r",
+							"// Status code test\r",
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"// Response time test\r",
+							"pm.test(\"Response time is below 900ms\", () => {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(900);\r",
+							"});\r",
+							"\r",
+							"// Header test\r",
+							"pm.test(\"Content-Type header is JSON\", () => {\r",
+							"    pm.expect(pm.response.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+							"});\r",
+							"\r",
+							"// Status field test\r",
+							"pm.test(\"Status field validation\", () => {\r",
+							"    pm.expect(json).to.have.property(\"status\");\r",
+							"    pm.expect(json.status).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"// Message field test\r",
+							"pm.test(\"Message field validation\", () => {\r",
+							"    pm.expect(json).to.have.property(\"message\").and.to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(json.message.toLowerCase()).to.include(\"successfully\");\r",
+							"});\r",
+							"\r",
+							"// Data field test\r",
+							"pm.test(\"Data field validation\", () => {\r",
+							"    const data = json.data;\r",
+							"\r",
+							"    if (data === null) {\r",
+							"        console.log(\"No employee data available.\");\r",
+							"        pm.expect(data).to.be.null; // Optional check\r",
+							"        return; // Skip further validations\r",
+							"    }\r",
+							"\r",
+							"    // Validate employee object\r",
+							"    pm.expect(data).to.be.an(\"object\").and.not.to.be.empty;\r",
+							"    pm.expect(data).to.have.property(\"id\").and.satisfy(id => !isNaN(Number(id)));\r",
+							"    pm.expect(data).to.have.property(\"employee_name\").and.to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(data).to.have.property(\"employee_salary\").and.to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(data).to.have.property(\"employee_age\").and.to.be.a(\"string\").and.not.to.be.empty;\r",
+							"});\r",
+							"\r",
+							"// Profile image test\r",
+							"pm.test(\"Profile image is string or null\", () => {\r",
+							"    const data = json.data;\r",
+							"    if (data === null) {\r",
+							"        pm.expect(data).to.be.null; // Optional\r",
+							"        return;\r",
+							"    }\r",
+							"    const profileImage = data.profile_image;\r",
+							"    pm.expect(profileImage === null || typeof profileImage === \"string\").to.be.true;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}employee/6163",
+					"host": [
+						"{{baseUrl}}employee"
+					],
+					"path": [
+						"6163"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create new record",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let json={};\r",
+							"try{\r",
+							"    json=pm.response.json();\r",
+							"}\r",
+							"catch(e)\r",
+							"{\r",
+							"    console.log(e);\r",
+							"}\r",
+							"pm.test(\"sts code\",()=>{\r",
+							"    pm.expect(pm.response.code).to.oneOf([200,201]);\r",
+							"});\r",
+							"pm.test(\"response time\", () => {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(900);\r",
+							"});\r",
+							"pm.test(\"header\",()=>{\r",
+							"    pm.expect(pm.response.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+							"});\r",
+							"pm.test(\"status\",()=>{\r",
+							"    pm.expect(json).to.have.property(\"status\");\r",
+							"    pm.expect(json.status).to.be.a(\"string\");\r",
+							"});\r",
+							"pm.test(\"message\",()=>{\r",
+							"     pm.expect(json).to.have.property(\"message\").and.to.be.a(\"string\").and.not.to.be.empty;\r",
+							"     pm.expect(json.message.toLowerCase()).to.include(\"successfully\");\r",
+							"});\r",
+							"pm.test(\"data\",()=>{\r",
+							"     pm.expect(json).to.have.property(\"data\").and.to.be.an(\"object\").and.not.to.be.empty;\r",
+							"     pm.expect(json.data).to.have.property(\"name\").and.to.be.an(\"string\").and.not.to.be.empty;\r",
+							"     pm.expect(json.data).to.have.property(\"salary\").and.to.be.an(\"string\").and.not.to.be.empty;\r",
+							"     pm.expect(json.data).to.have.property(\"age\").and.to.be.an(\"string\").and.not.to.be.empty;\r",
+							"     pm.expect(json.data).to.have.property(\"id\").and.to.be.a(\"number\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"test\",\r\n    \"salary\":\"123\",\r\n    \"age\":\"23\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}create",
+					"host": [
+						"{{baseUrl}}create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let json={};\r",
+							"try{\r",
+							"    json=pm.response.json();\r",
+							"}\r",
+							"catch(e)\r",
+							"{\r",
+							"    console.log(e);\r",
+							"}\r",
+							"pm.test(\"sts code\",()=>{\r",
+							"    pm.expect(pm.response.code).to.oneOf([200,201]);\r",
+							"});\r",
+							"pm.test(\"response time\", () => {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(900);\r",
+							"});\r",
+							"pm.test(\"header\",()=>{\r",
+							"    pm.expect(pm.response.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+							"});\r",
+							"pm.test(\"status\",()=>{\r",
+							"    pm.expect(json).to.have.property(\"status\");\r",
+							"    pm.expect(json.status).to.be.a(\"string\");\r",
+							"});\r",
+							"pm.test(\"message\",()=>{\r",
+							"     pm.expect(json).to.have.property(\"message\").and.to.be.a(\"string\").and.not.to.be.empty;\r",
+							"     pm.expect(json.message.toLowerCase()).to.include(\"successfully\");\r",
+							"});\r",
+							"pm.test(\"data\",()=>{\r",
+							"     pm.expect(json).to.have.property(\"data\").and.to.be.an(\"object\").and.not.to.be.empty;\r",
+							"     pm.expect(json.data).to.have.property(\"name\").and.to.be.an(\"string\").and.not.to.be.empty;\r",
+							"     pm.expect(json.data).to.have.property(\"salary\").and.to.be.an(\"string\").and.not.to.be.empty;\r",
+							"     pm.expect(json.data).to.have.property(\"age\").and.to.be.an(\"string\").and.not.to.be.empty;\r",
+							"     \r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"tester\",\r\n    \"salary\":\"12345\",\r\n    \"age\":\"25\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}update/6163",
+					"host": [
+						"{{baseUrl}}update"
+					],
+					"path": [
+						"6163"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let json={};\r",
+							"try{\r",
+							"    json=pm.response.json();\r",
+							"}\r",
+							"catch(e)\r",
+							"{\r",
+							"    console.log(e);\r",
+							"}\r",
+							"pm.test(\"sts code\",()=>{\r",
+							"    pm.expect(pm.response.code).to.oneOf([200,201]);\r",
+							"});\r",
+							"pm.test(\"response time\", () => {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(900);\r",
+							"});\r",
+							"pm.test(\"header\",()=>{\r",
+							"    pm.expect(pm.response.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+							"});\r",
+							"pm.test(\"status\",()=>{\r",
+							"    pm.expect(json).to.have.property(\"status\");\r",
+							"    pm.expect(json.status).to.be.a(\"string\");\r",
+							"});\r",
+							"pm.test(\"message\",()=>{\r",
+							"     pm.expect(json).to.have.property(\"message\").and.to.be.a(\"string\").and.not.to.be.empty;\r",
+							"     pm.expect(json.message.toLowerCase()).to.include(\"successfully\");\r",
+							"});\r",
+							"pm.test(\"data \",()=>{\r",
+							"    pm.expect(json).to.have.property(\"data\");\r",
+							"    pm.expect(json.data).to.be.a(\"string\").and.not.to.be.empty;;\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}delete/6163",
+					"host": [
+						"{{baseUrl}}delete"
+					],
+					"path": [
+						"6163"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

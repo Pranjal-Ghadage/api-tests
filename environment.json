@@ -1,0 +1,22 @@
+{
+  "id": "provider-env",
+  "name": "Provider Environment",
+  "values": [
+    {
+      "key": "email",
+      "value": "ftfl@gmail.com",
+      "enabled": true
+    },
+    {
+      "key": "password",
+      "value": "Satish@123",
+      "enabled": true
+    },
+    {
+      "key": "baseURL",
+      "value": "https://api.fetchtrue.com/api",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment"
+}

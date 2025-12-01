@@ -1,0 +1,4341 @@
+{
+	"info": {
+		"_postman_id": "a87085a4-e172-40b1-be86-060eb266d5e2",
+		"name": "Provider",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47781331",
+		"_collection_link": "https://ghadagepranjal202-4592384.postman.co/workspace/pranjal-ghadage's-Workspace~927017f8-b3bb-4470-8651-aff11f774d34/collection/47781331-a87085a4-e172-40b1-be86-060eb266d5e2?action=share&source=collection_link&creator=47781331"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "User register",
+					"item": [
+						{
+							"name": "user register",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response;\r",
+											"let json = response.json();  // Parsed response body\r",
+											"\r",
+											"// 1️⃣ Status Code & Success\r",
+											"pm.test(\"Status code is 200\", () => pm.expect(response.code).to.equal(200));\r",
+											"pm.test(\"Success flag is true\", () => pm.expect(json.success).to.be.true);\r",
+											"\r",
+											"// 2️⃣ Message & Token\r",
+											"pm.test(\"Message validation\", () => {\r",
+											"    pm.expect(json.message).to.be.a(\"string\");\r",
+											"    pm.expect(json.message.length).to.be.greaterThan(0); // works for dynamic messages\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Token exists\", () => {\r",
+											"    pm.expect(json.token).to.exist;\r",
+											"    pm.expect(json.token).to.be.a(\"string\");\r",
+											"    pm.expect(json.token.length).to.be.above(20);\r",
+											"});\r",
+											"\r",
+											"// 3️⃣ User Object\r",
+											"pm.test(\"User object exists\", () => pm.expect(json.user).to.be.an(\"object\"));\r",
+											"\r",
+											"// 4️⃣ User Fields Validation\r",
+											"const stringFields = [\"_id\", \"fullName\", \"email\", \"mobileNumber\", \"userId\", \"packageStatus\"];\r",
+											"const booleanFields = [\r",
+											"    \"personalDetailsCompleted\", \"additionalDetailsCompleted\", \"addressCompleted\",\r",
+											"    \"isAgree\", \"isEmailVerified\", \"isMobileVerified\", \"packageActive\",\r",
+											"    \"isCommissionDistribute\", \"isDeleted\"\r",
+											"];\r",
+											"const arrayFields = [\"myTeams\", \"favoriteServices\", \"favoriteProviders\", \"fcmTokens\"];\r",
+											"\r",
+											"pm.test(\"String fields validation\", () => {\r",
+											"    stringFields.forEach(f => pm.expect(json.user[f], `${f} should be string`).to.be.a(\"string\"));\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Boolean fields validation\", () => {\r",
+											"    booleanFields.forEach(f => pm.expect(json.user[f], `${f} should be boolean`).to.be.a(\"boolean\"));\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Array fields validation\", () => {\r",
+											"    arrayFields.forEach(f => pm.expect(json.user[f], `${f} should be array`).to.be.an(\"array\"));\r",
+											"});\r",
+											"\r",
+											"// 5️⃣ OTP Object\r",
+											"pm.test(\"OTP validation\", () => {\r",
+											"    if(json.user.otp){\r",
+											"        pm.expect(json.user.otp).to.be.an(\"object\");\r",
+											"        pm.expect(json.user.otp.verified).to.be.a(\"boolean\");\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"// 6️⃣ Date Fields\r",
+											"const dateFields = [\"createdAt\", \"updatedAt\"];\r",
+											"pm.test(\"Date fields validation\", () => {\r",
+											"    dateFields.forEach(f => pm.expect(json.user[f], `${f} should be string`).to.be.a(\"string\"));\r",
+											"    if(json.user.packageActivateDate !== null){\r",
+											"        pm.expect(json.user.packageActivateDate).to.be.a(\"string\");\r",
+											"    }\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const randomNum = Math.floor(Math.random() * 10000);\r",
+											"pm.environment.set(\"randomEmail\", `user${randomNum}@test.com`);\r",
+											"pm.environment.set(\"randomMobile\", `+9195${Math.floor(10000000 + Math.random() * 90000000)}`);\r",
+											"pm.environment.set(\"fullName\", `user${randomNum}`);"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"fullName\": \"{{$randomFullName}}\",\r\n  \"email\": \"{{randomEmail}}\",\r\n  \"mobileNumber\": \"{{randomMobile}}\",\r\n  \"password\": \"Priyanka@123\",\r\n  \"confirmPassword\": \"Priyanka@123\",\r\n  \"isAgree\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/auth/register",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User login",
+					"item": [
+						{
+							"name": "login user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let res=pm.response;\r",
+											"let json={};\r",
+											"try{\r",
+											"    json=res.json();\r",
+											"}catch(e){\r",
+											"    console.log(e);\r",
+											"}\r",
+											"\r",
+											"pm.test(\"sts check\",()=>{\r",
+											"    pm.expect(res.code).to.be.oneOf([200,201]);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"message\",()=>{\r",
+											"   pm.expect(json.message.toLowerCase()).to.include(\"login successful\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"token\",()=>{\r",
+											"   pm.expect(json.token).to.not.be.null;\r",
+											"   pm.expect(json.token).to.be.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"User object exists\", () => {\r",
+											"    pm.expect(json.user).to.be.an(\"object\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Required user fields validation\", () => {\r",
+											"    pm.expect(json.user._id).to.be.a(\"string\");\r",
+											"    pm.expect(json.user.fullName).to.be.a(\"string\");\r",
+											"    pm.expect(json.user.email).to.be.a(\"string\");\r",
+											"    pm.expect(json.user.mobileNumber).to.be.a(\"string\");\r",
+											"    pm.expect(json.user.userId).to.be.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"// --------------------\r",
+											"// 4️⃣ BOOLEAN FIELDS CHECK\r",
+											"// --------------------\r",
+											"pm.test(\"Boolean field validation\", () => {\r",
+											"    pm.expect(json.user.personalDetailsCompleted).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.user.additionalDetailsCompleted).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.user.addressCompleted).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.user.isAgree).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.user.isEmailVerified).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.user.isMobileVerified).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.user.packageActive).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.user.isCommissionDistribute).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.user.isDeleted).to.be.a(\"boolean\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"// --------------------\r",
+											"// 5️⃣ ARRAY FIELDS CHECK\r",
+											"// --------------------\r",
+											"pm.test(\"Array fields validation\", () => {\r",
+											"    pm.expect(json.user.myTeams).to.be.an(\"array\");\r",
+											"    pm.expect(json.user.serviceCustomers).to.be.an(\"array\");\r",
+											"    pm.expect(json.user.favoriteServices).to.be.an(\"array\");\r",
+											"    pm.expect(json.user.favoriteProviders).to.be.an(\"array\");\r",
+											"    pm.expect(json.user.fcmTokens).to.be.an(\"array\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"// --------------------\r",
+											"// 6️⃣ PACKAGE DETAILS CHECK\r",
+											"// --------------------\r",
+											"pm.test(\"Package fields validation\", () => {\r",
+											"    pm.expect(json.user.packageAmountPaid).to.be.a(\"number\");\r",
+											"    pm.expect(json.user.remainingAmount).to.be.a(\"number\");\r",
+											"    pm.expect(json.user.packagePrice).to.be.a(\"number\");\r",
+											"\r",
+											"    if (json.user.packageType !== null) {\r",
+											"        pm.expect(json.user.packageType).to.be.a(\"string\");\r",
+											"    }\r",
+											"\r",
+											"    pm.expect(json.user.packageStatus).to.be.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"// --------------------\r",
+											"// 7️⃣ DATE CHECK\r",
+											"// --------------------\r",
+											"pm.test(\"Validate date fields\", () => {\r",
+											"    pm.expect(json.user.createdAt).to.be.a(\"string\");\r",
+											"    pm.expect(json.user.updatedAt).to.be.a(\"string\");\r",
+											"\r",
+											"    if (json.user.packageActivateDate !== null) {\r",
+											"        pm.expect(json.user.packageActivateDate).to.be.a(\"string\");\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"\r",
+											"// --------------------\r",
+											"// 8️⃣ VERSION CHECK\r",
+											"// --------------------\r",
+											"pm.test(\"Version exists\", () => {\r",
+											"    pm.expect(json.user.__v).to.be.a(\"number\");\r",
+											"});\r",
+											"\r",
+											"/*\r",
+											"// 4️⃣ Required String Fields\r",
+											"// --------------------\r",
+											"const stringFields = [\"_id\", \"fullName\", \"email\", \"mobileNumber\", \"userId\", \"packageStatus\"];\r",
+											"pm.test(\"String fields validation\", () => {\r",
+											"    stringFields.forEach(field => {\r",
+											"        // ${field} dynamically inserts the field name into the test message\r",
+											"        pm.expect(json.user[field], `${field} should be a string`).to.be.a(\"string\");\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"// --------------------\r",
+											"// 5️⃣ Boolean Fields\r",
+											"// --------------------\r",
+											"const booleanFields = [\r",
+											"    \"personalDetailsCompleted\", \"additionalDetailsCompleted\", \"addressCompleted\",\r",
+											"    \"isAgree\", \"isEmailVerified\", \"isMobileVerified\",\r",
+											"    \"packageActive\", \"isCommissionDistribute\", \"isDeleted\"\r",
+											"];\r",
+											"pm.test(\"Boolean fields validation\", () => {\r",
+											"    booleanFields.forEach(field => {\r",
+											"        pm.expect(json.user[field], `${field} should be boolean`).to.be.a(\"boolean\");\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"// --------------------\r",
+											"// 6️⃣ Array Fields\r",
+											"// --------------------\r",
+											"const arrayFields = [\"myTeams\", \"serviceCustomers\", \"favoriteServices\", \"favoriteProviders\", \"fcmTokens\"];\r",
+											"pm.test(\"Array fields validation\", () => {\r",
+											"    arrayFields.forEach(field => {\r",
+											"        pm.expect(json.user[field], `${field} should be an array`).to.be.an(\"array\");\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"// --------------------\r",
+											"// 7️⃣ Number Fields\r",
+											"// --------------------\r",
+											"const numberFields = [\"packageAmountPaid\", \"remainingAmount\", \"packagePrice\"];\r",
+											"pm.test(\"Number fields validation\", () => {\r",
+											"    numberFields.forEach(field => {\r",
+											"        pm.expect(json.user[field], `${field} should be a number`).to.be.a(\"number\");\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"// --------------------\r",
+											"// 8️⃣ Optional Fields\r",
+											"// --------------------\r",
+											"pm.test(\"Optional fields validation\", () => {\r",
+											"    if (json.user.packageType !== null) {\r",
+											"        pm.expect(json.user.packageType, \"packageType should be string\").to.be.a(\"string\");\r",
+											"    }\r",
+											"    if (json.user.packageActivateDate !== null) {\r",
+											"        pm.expect(json.user.packageActivateDate, \"packageActivateDate should be string\").to.be.a(\"string\");\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"// --------------------\r",
+											"// 9️⃣ Date Fields\r",
+											"// --------------------\r",
+											"const dateFields = [\"createdAt\", \"updatedAt\"];\r",
+											"pm.test(\"Date fields validation\", () => {\r",
+											"    dateFields.forEach(field => {\r",
+											"        pm.expect(json.user[field], `${field} should be date string`).to.be.a(\"string\");\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"// --------------------\r",
+											"// 🔟 Version Field\r",
+											"// --------------------\r",
+											"pm.test(\"__v exists and is number\", () => {\r",
+											"    pm.expect(json.user.__v, \"__v should be a number\").to.be.a(\"number\");\r",
+											"});\r",
+											"*/"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"user901@test.com\",\r\n  \"password\": \"Priyanka@123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://biz-booster.vercel.app/api/auth/login",
+									"protocol": "https",
+									"host": [
+										"biz-booster",
+										"vercel",
+										"app"
+									],
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Service customer",
+					"item": [
+						{
+							"name": "details serv custom",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://biz-booster.vercel.app/api/service-customer/69269ea4fd77692d61888c94",
+									"protocol": "https",
+									"host": [
+										"biz-booster",
+										"vercel",
+										"app"
+									],
+									"path": [
+										"api",
+										"service-customer",
+										"69269ea4fd77692d61888c94"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add service customer",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// ---------- Random 10 Digit Phone Number ----------\r",
+											"const randomMobile = Math.floor(6000000000 + Math.random() * 4000000000);\r",
+											"pm.environment.set(\"randomMobile\", randomMobile);\r",
+											"\r",
+											"// ---------- Random First Name ----------\r",
+											"const firstNames = [\"Aarav\", \"Vihaan\", \"Aryan\", \"Kabir\", \"Rohan\", \"Sam\", \"Kunal\", \"Rahul\", \"Arjun\", \"Ranveer\"];\r",
+											"const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)];\r",
+											"pm.environment.set(\"firstName\", randomFirstName);\r",
+											"\r",
+											"// ---------- Random Email ----------\r",
+											"const randomNum = Math.floor(Math.random() * 100000);\r",
+											"const randomEmail = `${randomFirstName.toLowerCase()}${randomNum}@test.com`;\r",
+											"pm.environment.set(\"randomEmail\", randomEmail);\r",
+											"console.log({\r",
+											"    phone: randomMobile,\r",
+											"    name: randomFirstName,\r",
+											"    email: randomEmail,\r",
+											"    \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let res=pm.response;\r",
+											"let json={};\r",
+											"try{\r",
+											"    json=res.json();\r",
+											"}catch(e)\r",
+											"{\r",
+											"    console.log(e);\r",
+											"}\r",
+											"pm.test(\"sts code\",()=>{\r",
+											"    pm.expect(res.code).to.be.oneOf([200,201]);\r",
+											"});\r",
+											"pm.test(\"success\",()=>{\r",
+											"    pm.expect(json).to.have.property(\"success\");\r",
+											"    pm.expect(json.success).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});\r",
+											"pm.test(\"data object exist\",()=>{\r",
+											"    pm.expect(json).to.have.property(\"data\");\r",
+											"    pm.expect(json.data).to.be.an(\"object\").and.not.empty;\r",
+											"    pm.expect(json.data.fullName).to.be.an(\"string\").and.not.empty;\r",
+											"    pm.expect(json.data.phone).to.be.an(\"string\").and.not.empty;\r",
+											"    pm.expect(json.data.email).to.be.an(\"string\").and.not.empty;\r",
+											"    //pm.expect(json.data.description).to.be.an(\"string\");\r",
+											"     pm.expect(json.data.description === null || typeof json.data.description === \"string\").to.be.true; \r",
+											"    pm.expect(json.data.address).to.be.an(\"string\").and.not.empty;\r",
+											"    pm.expect(json.data.city).to.be.an(\"string\").and.not.empty;\r",
+											"    pm.expect(json.data.state).to.be.an(\"string\").and.not.empty;\r",
+											"    pm.expect(json.data.country).to.be.an(\"string\").and.not.empty;\r",
+											"\r",
+											"    pm.expect(json.data).to.have.property(\"otp\").and.not.empty;\r",
+											"    pm.expect(json.data.otp).to.be.an(\"object\");\r",
+											"    pm.expect(json.data.otp.verified).to.be.a(\"boolean\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "fullName",
+											"value": "{{$randomFullName}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "{{randomMobile}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "{{randomEmail}}",
+											"type": "text"
+										},
+										{
+											"key": "address",
+											"value": "123, hadpsar, pune",
+											"type": "text"
+										},
+										{
+											"key": "city",
+											"value": "pune",
+											"type": "text"
+										},
+										{
+											"key": "state",
+											"value": "maharashtra",
+											"type": "text"
+										},
+										{
+											"key": "country",
+											"value": "india",
+											"type": "text"
+										},
+										{
+											"key": "user",
+											"value": "6927fe32c14f473b373111df",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://biz-booster.vercel.app/api/service-customer",
+									"protocol": "https",
+									"host": [
+										"biz-booster",
+										"vercel",
+										"app"
+									],
+									"path": [
+										"api",
+										"service-customer"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Provider",
+					"item": [
+						{
+							"name": "Register",
+							"item": [
+								{
+									"name": "valid Register",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"\r",
+													"let json={};\r",
+													"try\r",
+													"{\r",
+													"  json=pm.response.json();\r",
+													"}\r",
+													"catch(e)\r",
+													"{\r",
+													"    console.log(e);\r",
+													"}\r",
+													"\r",
+													"pm.test(\"status code\",()=>{\r",
+													"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"message\",()=>{\r",
+													"    pm.expect(json.message.toLowerCase()).to.include(\"registered\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"provider object exist\",()=>{\r",
+													"    pm.expect(json).to.have.property(\"provider\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"provider field exist\",()=>{\r",
+													"    pm.expect(json.provider).to.have.property(\"fullName\");\r",
+													"    pm.expect(json.provider).to.have.property(\"phoneNo\");\r",
+													"    pm.expect(json.provider).to.have.property(\"email\");\r",
+													"    pm.expect(json.provider).to.have.property(\"password\");\r",
+													"    pm.expect(json.provider).to.have.property(\"registrationStatus\");\r",
+													"    pm.expect(json.provider).to.have.property(\"_id\");\r",
+													"    pm.expect(json.provider).to.have.property(\"createdAt\");\r",
+													"    pm.expect(json.provider).to.have.property(\"updatedAt\");\r",
+													"    pm.expect(json.provider).to.have.property(\"providerId\");\r",
+													"    pm.expect(json.provider).to.have.property(\"__v\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"fields type\",()=>{\r",
+													"    pm.expect(json.provider.fullName).to.be.a(\"string\").and.not.empty;\r",
+													"    pm.expect(json.provider.phoneNo).to.be.a(\"string\").and.not.empty;\r",
+													"    pm.expect(json.provider.email).to.be.a(\"string\").and.not.empty;\r",
+													"    pm.expect(json.provider.password).to.be.a(\"string\").and.not.empty;\r",
+													"    pm.expect(json.provider.registrationStatus).to.be.a(\"string\").and.not.empty;\r",
+													"    pm.expect(json.provider._id).to.be.a(\"string\").and.not.empty;\r",
+													"    pm.expect(json.provider.createdAt).to.be.a(\"string\").and.not.empty;\r",
+													"    pm.expect(json.provider.updatedAt).to.be.a(\"string\").and.not.empty;\r",
+													"    pm.expect(json.provider.providerId).to.be.a(\"string\").and.not.empty;\r",
+													"});\r",
+													"    pm.test(\"number fields\",()=>{\r",
+													"    pm.expect(json.provider.__v).to.be.a(\"number\");\r",
+													"    pm.expect(json.provider.averageRating).to.be.a(\"number\");\r",
+													"    pm.expect(json.provider.totalReviews).to.be.a(\"number\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Arrays are empty \", () => {\r",
+													"    pm.expect(json.provider.galleryImages).to.be.an(\"array\").that.is.empty;\r",
+													"    pm.expect(json.provider.subscribedServices).to.be.an(\"array\").that.is.empty;\r",
+													"});\r",
+													"\r",
+													"\r",
+													"pm.test(\"boolean fields\",()=>{\r",
+													"    pm.expect(json.provider.isRejected).to.be.a(\"boolean\");\r",
+													"    pm.expect(json.provider.isApproved).to.be.a(\"boolean\");\r",
+													"    pm.expect(json.provider.isVerified).to.be.a(\"boolean\");\r",
+													"    pm.expect(json.provider.isDeleted).to.be.a(\"boolean\");\r",
+													"    pm.expect(json.provider.isStoreOpen).to.be.a(\"boolean\");\r",
+													"    pm.expect(json.provider.step1Completed).to.be.a(\"boolean\");\r",
+													"    pm.expect(json.provider.storeInfoCompleted).to.be.a(\"boolean\");\r",
+													"    pm.expect(json.provider.kycCompleted).to.be.a(\"boolean\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"token exists\",()=>{\r",
+													"    pm.expect(json).to.have.property(\"token\");\r",
+													"    pm.expect(json.token).to.be.a(\"string\").and.not.empty;\r",
+													"})\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {},
+												"requests": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"const randomNum = Math.floor(Math.random() * 10000);\r",
+													"pm.environment.set(\"randomEmail\", `user${randomNum}@test.com`);\r",
+													"pm.environment.set(\"randomMobile\", `+9195${Math.floor(10000000 + Math.random() * 90000000)}`);\r",
+													"pm.environment.set(\"fullName\", `user${randomNum}`);"
+												],
+												"type": "text/javascript",
+												"packages": {},
+												"requests": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "email",
+													"value": "{{randomEmail}}",
+													"type": "text"
+												},
+												{
+													"key": "fullName",
+													"value": "{{$randomFullName}}",
+													"type": "text"
+												},
+												{
+													"key": "phoneNo",
+													"value": "{{randomMobile}}",
+													"type": "text"
+												},
+												{
+													"key": "password",
+													"value": "Sam@123",
+													"type": "text"
+												},
+												{
+													"key": "confirmPassword",
+													"value": "Sam@123",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/register",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"register"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "invalid register",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"let json = pm.response.json();\r",
+													"\r",
+													"pm.test(\"Status code should indicate failure\", () => {\r",
+													"    pm.expect(pm.response.code).to.be.oneOf([400, 401, 403, 409, 422]);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Errors array must exist\", () => {\r",
+													"    pm.expect(json).to.have.property(\"errors\");\r",
+													"    pm.expect(json.errors).to.be.an(\"array\").that.is.not.empty;\r",
+													"});\r",
+													"\r",
+													"// -------- 3️⃣ Pattern-based message validation --------\r",
+													"pm.test(\"Error message should contain meaningful keywords\", () => {\r",
+													"\r",
+													"    const expectedKeywords = [\r",
+													"        // field-based\r",
+													"        \"email\", \"phone\", \"password\", \"name\",\r",
+													"        // rule / validation based\r",
+													"        \"invalid\", \"required\", \"missing\", \"must\",\r",
+													"        // length rules\r",
+													"        \"character\", \"minimum\", \"too small\", \"length\", \"contain\"\r",
+													"    ];\r",
+													"\r",
+													"    json.errors.forEach(err => {\r",
+													"        const message = err.message.toLowerCase();\r",
+													"\r",
+													"        const keywordFound = expectedKeywords.some(keyword =>\r",
+													"            message.includes(keyword)\r",
+													"        );\r",
+													"\r",
+													"        pm.expect(\r",
+													"            keywordFound,\r",
+													"            `Message '${message}' doesn't match expected validation pattern`\r",
+													"        ).to.be.true;\r",
+													"    });\r",
+													"});\r",
+													"\r",
+													"// -------- 3️⃣B Validate error object format --------\r",
+													"pm.test(\"Each error object should contain required structure fields\", () => {\r",
+													"\r",
+													"    json.errors.forEach((err, index) => {\r",
+													"\r",
+													"        // Must always have message\r",
+													"        pm.expect(err, `Error object at index ${index} missing message`)\r",
+													"            .to.have.property(\"message\");\r",
+													"\r",
+													"        // Expected metadata keys\r",
+													"        pm.expect(err, `Error object at index ${index} must contain validation structure`)\r",
+													"            .to.have.any.keys([\"validation\", \"code\", \"path\"]);\r",
+													"\r",
+													"        // Path must be array if exists\r",
+													"        if (err.path) {\r",
+													"            pm.expect(err.path).to.be.an(\"array\");\r",
+													"        }\r",
+													"    });\r",
+													"});\r",
+													"// -------- 4️⃣ Ensure no token or provider exists in invalid request --------\r",
+													"pm.test(\"Token must NOT exist\", () => {\r",
+													"    pm.expect(json).to.not.have.property(\"token\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Provider must NOT exist\", () => {\r",
+													"    pm.expect(json).to.not.have.property(\"provider\");\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {},
+												"requests": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "email",
+													"value": "mayaaagmail.com",
+													"type": "text"
+												},
+												{
+													"key": "fullName",
+													"value": "maya",
+													"type": "text"
+												},
+												{
+													"key": "phoneNo",
+													"value": "999999999",
+													"type": "text"
+												},
+												{
+													"key": "password",
+													"value": "Mayaaa@123",
+													"type": "text"
+												},
+												{
+													"key": "confirmPassword",
+													"value": "Mayaaa@123",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/register",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"register"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "signup store info",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"const randomNum = Math.floor(Math.random() * 10000);\r",
+													"pm.environment.set(\"randomEmail\", `user${randomNum}@test.com`);\r",
+													"pm.environment.set(\"randomMobile\", `+9195${Math.floor(10000000 + Math.random() * 90000000)}`);\r",
+													"pm.environment.set(\"storeName\", \"My Test Store\");"
+												],
+												"type": "text/javascript",
+												"packages": {},
+												"requests": {}
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "storeName",
+													"value": "{{storeName}}",
+													"type": "text"
+												},
+												{
+													"key": "storePhone",
+													"value": "{{randomMobile}}",
+													"type": "text"
+												},
+												{
+													"key": "storeEmail",
+													"value": "{{randomEmail}}",
+													"type": "text"
+												},
+												{
+													"key": "module",
+													"value": "6822e018e8235364b35df1ab",
+													"type": "text"
+												},
+												{
+													"key": "zone",
+													"value": "68d796b747b1d2670f05b6c5",
+													"type": "text"
+												},
+												{
+													"key": "logo",
+													"type": "file",
+													"src": [
+														"/C:/Users/Win/Downloads/Onbording.jpg",
+														"/C:/Users/Win/Downloads/It Services.jpg"
+													]
+												},
+												{
+													"key": "cover",
+													"type": "file",
+													"src": [
+														"/C:/Users/Win/Downloads/Education Banner.jpg",
+														"/C:/Users/Win/Downloads/Finance Thumbnail.jpg"
+													]
+												},
+												{
+													"key": "tax",
+													"value": "",
+													"type": "text",
+													"disabled": true
+												},
+												{
+													"key": "location",
+													"value": "{ \"type\": \"office\", \"coordinates\": [77.5946, 12.9716] }",
+													"type": "text",
+													"disabled": true
+												},
+												{
+													"key": "address",
+													"value": "pune",
+													"type": "text"
+												},
+												{
+													"key": "officeNo",
+													"value": "307",
+													"type": "text"
+												},
+												{
+													"key": "city",
+													"value": "pune",
+													"type": "text"
+												},
+												{
+													"key": "state",
+													"value": "maharashtra",
+													"type": "text"
+												},
+												{
+													"key": "country",
+													"value": "india",
+													"type": "text"
+												},
+												{
+													"key": "id",
+													"value": "6928006ac14f473b373118b3",
+													"description": "prov id",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "https://api.fetchtrue.com/api/provider/store-info/",
+											"protocol": "https",
+											"host": [
+												"api",
+												"fetchtrue",
+												"com"
+											],
+											"path": [
+												"api",
+												"provider",
+												"store-info",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "specific prov details",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Get the response\r",
+													"let res = pm.response;\r",
+													"let json = {};\r",
+													"\r",
+													"// Parse JSON safely\r",
+													"try {\r",
+													"    json = res.json();\r",
+													"} catch (e) {\r",
+													"    console.log(\"Response is not JSON:\", e);\r",
+													"}\r",
+													"\r",
+													"// ✅ Check status code\r",
+													"pm.test(\"Status code is 200\", () => {\r",
+													"    pm.expect(res.code).to.equal(200);\r",
+													"});\r",
+													"\r",
+													"// ✅ Check response type\r",
+													"pm.test(\"Content-Type is JSON\", () => {\r",
+													"    pm.expect(res.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+													"});\r",
+													"\r",
+													"// ✅ Check success\r",
+													"pm.test(\"Success is true\", () => {\r",
+													"    pm.expect(json.success).to.be.true;\r",
+													"});\r",
+													"\r",
+													"// ✅ Check data exists\r",
+													"pm.test(\"Data object exists\", () => {\r",
+													"    pm.expect(json.data).to.be.an(\"object\");\r",
+													"});\r",
+													"\r",
+													"// ✅ Check main provider fields\r",
+													"pm.test(\"Provider has required fields\", () => {\r",
+													"    pm.expect(json.data).to.have.property(\"_id\");\r",
+													"    pm.expect(json.data).to.have.property(\"fullName\");\r",
+													"    pm.expect(json.data).to.have.property(\"phoneNo\");\r",
+													"    pm.expect(json.data).to.have.property(\"email\");\r",
+													"});\r",
+													"\r",
+													"// ✅ Check store info\r",
+													"pm.test(\"Store info exists\", () => {\r",
+													"    pm.expect(json.data.storeInfo).to.be.an(\"object\");\r",
+													"    pm.expect(json.data.storeInfo).to.have.property(\"storeName\");\r",
+													"    pm.expect(json.data.storeInfo).to.have.property(\"city\");\r",
+													"    pm.expect(json.data.storeInfo).to.have.property(\"country\");\r",
+													"});\r",
+													"\r",
+													"// ✅ Check boolean flags\r",
+													"pm.test(\"Boolean flags are correct\", () => {\r",
+													"    pm.expect(json.data.isApproved).to.be.true;\r",
+													"    pm.expect(json.data.isVerified).to.be.a(\"boolean\");\r",
+													"    pm.expect(json.data.isStoreOpen).to.be.a(\"boolean\");\r",
+													"});\r",
+													"\r",
+													"// ✅ Check gallery images\r",
+													"pm.test(\"Gallery images exist\", () => {\r",
+													"    pm.expect(json.data.galleryImages).to.be.an(\"array\");\r",
+													"    pm.expect(json.data.galleryImages.length).to.be.above(0);\r",
+													"});\r",
+													"\r",
+													"// ✅ Check subscribed services\r",
+													"pm.test(\"Subscribed services exist\", () => {\r",
+													"    pm.expect(json.data.subscribedServices).to.be.an(\"array\");\r",
+													"    pm.expect(json.data.subscribedServices.length).to.be.above(0);\r",
+													"});\r",
+													"\r",
+													"// ✅ Check KYC documents\r",
+													"pm.test(\"KYC documents exist\", () => {\r",
+													"    pm.expect(json.data.kyc).to.be.an(\"object\");\r",
+													"    pm.expect(json.data.kyc.aadhaarCard).to.be.an(\"array\");\r",
+													"    pm.expect(json.data.kyc.panCard).to.be.an(\"array\");\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {},
+												"requests": {}
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://api.fetchtrue.com/api/provider/edit-profile/6916cf6c39e0c2935cb5fd4b",
+											"protocol": "https",
+											"host": [
+												"api",
+												"fetchtrue",
+												"com"
+											],
+											"path": [
+												"api",
+												"provider",
+												"edit-profile",
+												"6916cf6c39e0c2935cb5fd4b"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "All prov details",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// Get response\r",
+													"let res = pm.response;\r",
+													"let json = {};\r",
+													"\r",
+													"// Parse JSON safely\r",
+													"try {\r",
+													"    json = res.json();\r",
+													"} catch (e) {\r",
+													"    console.log(\"Response is not JSON:\", e);\r",
+													"}\r",
+													"\r",
+													"// ✅ Check that the status code is 200\r",
+													"pm.test(\"Status code is 200\", () => {\r",
+													"    pm.expect(res.code).to.equal(200);\r",
+													"});\r",
+													"\r",
+													"// ✅ Check that the response content type is JSON\r",
+													"pm.test(\"Content-Type is JSON\", () => {\r",
+													"    pm.expect(res.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+													"});\r",
+													"\r",
+													"// ✅ Make sure the response is an array\r",
+													"pm.test(\"Response data is an array\", () => {\r",
+													"    pm.expect(json).to.be.an(\"array\");\r",
+													"    pm.expect(json.length).to.be.above(0);\r",
+													"});\r",
+													"\r",
+													"// ✅ Loop through each provider in the array\r",
+													"json.forEach((provider, index) => {\r",
+													"\r",
+													"    // Basic provider info\r",
+													"    pm.test(`Provider ${index}: has basic fields`, () => {\r",
+													"        pm.expect(provider).to.have.property(\"_id\");\r",
+													"        pm.expect(provider).to.have.property(\"fullName\");\r",
+													"        pm.expect(provider).to.have.property(\"email\");\r",
+													"        pm.expect(provider).to.have.property(\"phoneNo\");\r",
+													"        pm.expect(provider).to.have.property(\"providerId\");\r",
+													"    });\r",
+													"\r",
+													"    // Gallery images\r",
+													"    pm.test(`Provider ${index}: galleryImages exist`, () => {\r",
+													"        pm.expect(provider.galleryImages).to.be.an(\"array\");\r",
+													"        pm.expect(provider.galleryImages.length).to.be.above(0);\r",
+													"    });\r",
+													"\r",
+													"    // Subscribed services\r",
+													"    pm.test(`Provider ${index}: subscribedServices exist`, () => {\r",
+													"        pm.expect(provider.subscribedServices).to.be.an(\"array\");\r",
+													"        // If you are a beginner, you can skip checking service details for now\r",
+													"    });\r",
+													"\r",
+													"    // Store info\r",
+													"    pm.test(`Provider ${index}: storeInfo exists`, () => {\r",
+													"        pm.expect(provider.storeInfo).to.have.property(\"storeName\");\r",
+													"        pm.expect(provider.storeInfo).to.have.property(\"storePhone\");\r",
+													"        pm.expect(provider.storeInfo).to.have.property(\"storeEmail\");\r",
+													"        pm.expect(provider.storeInfo).to.have.property(\"address\");\r",
+													"    });\r",
+													"\r",
+													"    // KYC info\r",
+													"    pm.test(`Provider ${index}: KYC exists`, () => {\r",
+													"        pm.expect(provider.kyc).to.have.property(\"aadhaarCard\");\r",
+													"        pm.expect(provider.kyc).to.have.property(\"panCard\");\r",
+													"        pm.expect(provider.kyc).to.have.property(\"storeDocument\");\r",
+													"        pm.expect(provider.kyc).to.have.property(\"GST\");\r",
+													"    });\r",
+													"\r",
+													"    // Status flags\r",
+													"    pm.test(`Provider ${index}: status flags are booleans`, () => {\r",
+													"        pm.expect(provider.isRejected).to.be.a(\"boolean\");\r",
+													"        pm.expect(provider.isApproved).to.be.a(\"boolean\");\r",
+													"        pm.expect(provider.isVerified).to.be.a(\"boolean\");\r",
+													"        pm.expect(provider.isDeleted).to.be.a(\"boolean\");\r",
+													"        pm.expect(provider.isStoreOpen).to.be.a(\"boolean\");\r",
+													"    });\r",
+													"\r",
+													"    // Created and updated dates\r",
+													"    pm.test(`Provider ${index}: dates are valid`, () => {\r",
+													"        pm.expect(new Date(provider.createdAt).toString()).not.to.eql(\"Invalid Date\");\r",
+													"        pm.expect(new Date(provider.updatedAt).toString()).not.to.eql(\"Invalid Date\");\r",
+													"    });\r",
+													"\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {},
+												"requests": {}
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://api.fetchtrue.com/api/provider/",
+											"protocol": "https",
+											"host": [
+												"api",
+												"fetchtrue",
+												"com"
+											],
+											"path": [
+												"api",
+												"provider",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "prov profile update",
+									"request": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "fullName",
+													"value": "sameera",
+													"type": "text"
+												},
+												{
+													"key": "phoneNo",
+													"value": "8888888880",
+													"type": "text"
+												},
+												{
+													"key": "email",
+													"value": "sameera@gmail.com",
+													"type": "text"
+												},
+												{
+													"key": "storeInfo.storeName",
+													"value": "coursea",
+													"type": "text"
+												},
+												{
+													"key": "storeInfo.storePhone",
+													"value": "9090909099",
+													"type": "text"
+												},
+												{
+													"key": "storeInfo.storeEmail",
+													"value": "coursea@gmail.com",
+													"type": "text"
+												},
+												{
+													"key": "storeInfo.city",
+													"value": "pune",
+													"type": "text"
+												},
+												{
+													"key": "storeInfo.state",
+													"value": "maharashtra",
+													"type": "text"
+												},
+												{
+													"key": "storeInfo.country",
+													"value": "india",
+													"type": "text",
+													"disabled": true
+												},
+												{
+													"key": "logo",
+													"type": "file",
+													"src": "/C:/Users/Win/Downloads/view.htm"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/edit-profile/69258971c14f473b372d9587",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"edit-profile",
+												"69258971c14f473b372d9587"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Login",
+							"item": [
+								{
+									"name": "valid login",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"pm.test(\"Content-Type is present\", function () {\r",
+													"    pm.response.to.have.header(\"Content-Type\");\r",
+													"});\r",
+													"pm.test(\"Your test name\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    pm.expect(jsonData.value).to.eql(100);\r",
+													"});\r",
+													"pm.test(\"Body matches string\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"Login successful\");\r",
+													"});\r",
+													"pm.test(\"Body is correct\", function () {\r",
+													"    pm.response.to.have.body(\"Login successful\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {},
+												"requests": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\":\"rim@gmail.com\",\r\n    \"password\":\"Rim@123\"\r\n}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/login",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"login"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "invalid login",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"let res = pm.response;\r",
+													"let json = {};\r",
+													"\r",
+													"try { \r",
+													"    json = res.json(); \r",
+													"} catch (e) {}\r",
+													"\r",
+													"// ---------------------------\r",
+													"// All possible validation errors\r",
+													"// ---------------------------\r",
+													"const validErrors = [\r",
+													"    \"invalid password\",\r",
+													"    \"email is required\",\r",
+													"    \"password is required\",\r",
+													"    \"user not found\",\r",
+													"    \"invalid email\",\r",
+													"    \"string must contain at least 10 character(s)\",\r",
+													"    \"phone number already registered\"\r",
+													"].map(e => e.toLowerCase()); // normalize to lowercase\r",
+													"\r",
+													"\r",
+													"\r",
+													"// ---------------------------\r",
+													"// 1. Status Code Check\r",
+													"// ---------------------------\r",
+													"pm.test(\"Invalid: Status code is 4xx\", () => {\r",
+													"    pm.expect(res.code).to.be.within(400, 499);\r",
+													"});\r",
+													"\r",
+													"// ---------------------------\r",
+													"// 2. Content-Type Check\r",
+													"// ---------------------------\r",
+													"pm.test(\"Content-Type is present\", () => {\r",
+													"    pm.response.to.have.header(\"Content-Type\");\r",
+													"});\r",
+													"\r",
+													"// ---------------------------\r",
+													"// 3. Body contains one valid error\r",
+													"// ---------------------------\r",
+													"pm.test(\"Body contains a valid error message\", () => {\r",
+													"    const body = res.text().toLowerCase();\r",
+													"    const matched = validErrors.some(err => body.includes(err));\r",
+													"    pm.expect(matched, \"Unexpected error message in body\").to.be.true;\r",
+													"});\r",
+													"\r",
+													"// ---------------------------\r",
+													"// 4. Validate json.errors array\r",
+													"// ---------------------------\r",
+													"pm.test(\"Errors array contains only valid error messages\", () => {\r",
+													"    if (json.errors && json.errors.length > 0) {\r",
+													"        json.errors.forEach(err => {\r",
+													"            const msg = err.message.toLowerCase();\r",
+													"            const matched = validErrors.some(valid => msg.includes(valid));\r",
+													"            pm.expect(matched, `Unexpected error message: ${msg}`).to.be.true;\r",
+													"        });\r",
+													"    }\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {},
+												"requests": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\":\"reem@gmail.com\",\r\n    \"password\":\"Reem@123\"\r\n}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/login",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"login"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "prov store aboutus",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"aboutUs\": \"We  test.\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/provider/about-us/6916cf6c39e0c2935cb5fd4b",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"provider",
+										"about-us",
+										"6916cf6c39e0c2935cb5fd4b"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Subscribed services",
+					"item": [
+						{
+							"name": "subscribe serv",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let res=pm.response;\r",
+											"let json={};\r",
+											"try{\r",
+											"    json=res.json();\r",
+											"}catch(e){\r",
+											"    console.log(e);\r",
+											"}\r",
+											" pm.test(\"sts check\",()=>{\r",
+											"    pm.expect(res.code).to.equal(200);\r",
+											" });\r",
+											" \r",
+											" pm.test(\"Content-Type is JSON\", () => {\r",
+											"    pm.expect(res.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+											"});\r",
+											"\r",
+											" pm.test(\"Success status should be true\", () => {\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"    pm.expect(json.success).to.be.a(\"boolean\");\r",
+											"});\r",
+											"\r",
+											"  pm.test(\"Subscribed services array exists and is NOT empty\", () => {\r",
+											"    pm.expect(json).to.have.property(\"subscribedServices\");\r",
+											"    pm.expect(json.subscribedServices).to.be.an(\"array\").that.is.not.empty;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"providerId\": \"6928006ac14f473b373118b3\",\r\n    \"serviceId\": \"6879edae6f1a199552823f94\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/provider/subscribe",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"provider",
+										"subscribe"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "unsubscribe serv",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let res=pm.response;\r",
+											"let json={};\r",
+											"try{\r",
+											"    json=res.json();\r",
+											"}catch(e)\r",
+											"{\r",
+											"    console.log(e);\r",
+											"}\r",
+											" pm.test(\"sts check\",()=>{\r",
+											"    pm.expect(res.code).to.equal(200);\r",
+											" });\r",
+											" pm.test(\"success\",()=>{\r",
+											"    pm.expect(json).to.have.property(\"success\");\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"    pm.expect(json.success).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.success).to.equal(true);\r",
+											" });\r",
+											" \r",
+											" pm.test(\"message\",()=>{\r",
+											"    pm.expect(json).to.have.property(\"message\");\r",
+											"    pm.expect(json.message).to.be.a(\"string\");\r",
+											"    pm.expect(json.message.toLowerCase()).to.include(\" unsubscribed \");\r",
+											" });\r",
+											" pm.test(\"subscribe service array null\",()=>{\r",
+											"    pm.expect(json).to.have.property(\"subscribedServices\");\r",
+											"    pm.expect(json.subscribedServices).to.be.a(\"array\");\r",
+											"     pm.expect(json.subscribedServices).to.be.empty;\r",
+											" });\r",
+											" "
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"providerId\": \"6928006ac14f473b373118b3\",\r\n    \"serviceId\": \"6879edae6f1a199552823f94\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/provider/unsubscribe",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"provider",
+										"unsubscribe"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit price subscribe by serv id",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"providerPrices\": [\r\n        {\r\n            \"provider\": \"64f8c0a9f3d2c12345678901\",\r\n            \"providerMRP\": 1200,\r\n            \"providerDiscount\": 200,\r\n            \"providerPrice\": 1000\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/service/provider-price/6870ebc000f9073f9528593b",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"service",
+										"provider-price",
+										"6870ebc000f9073f9528593b"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "subscribe serv details",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "subscribe serv details by serv id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/service/69259006d5dc7d5edd18fb22",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"service",
+										"69259006d5dc7d5edd18fb22"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "serviceman",
+					"item": [
+						{
+							"name": "specific serviceman by prov id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let res= pm.response;\r",
+											"let json={};\r",
+											"try\r",
+											"{\r",
+											"    json=res.json();\r",
+											"}\r",
+											"catch(e)\r",
+											"{\r",
+											"    console.log(e);\r",
+											"}\r",
+											"\r",
+											"pm.test(\"status check\", ()=>{\r",
+											"    pm.expect(res.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is present\", function () {\r",
+											"    pm.response.to.have.header(\"Content-Type\");\r",
+											"});\r",
+											"pm.test(\"Success is true\", () => {\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});\r",
+											"\r",
+											"// 4. Data is an array\r",
+											"pm.test(\"Data is an array\", () => {\r",
+											"    pm.expect(json.data).to.be.an(\"array\");\r",
+											"    pm.expect(json).to.have.property(\"data\");\r",
+											"});\r",
+											"//array must be empty\r",
+											"pm.test(\"Array may be empty\", () => {\r",
+											"    pm.expect(json.data.length).to.be.at.least(0);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/serviceman/filterByProvider/691c273ccd709f9f1873d932",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"serviceman",
+										"filterByProvider",
+										"691c273ccd709f9f1873d932"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "serviceman details",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let json = pm.response.json();   // <-- THIS IS THE ONLY json YOU NEED\r",
+											"\r",
+											"pm.test(\"status check\", () => {\r",
+											"    pm.expect(pm.response.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"header\", () => {\r",
+											"    pm.expect(pm.response.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"// 1. Response is an array\r",
+											"pm.test(\"Response is an array\", function () {\r",
+											"    pm.expect(json).to.be.an(\"array\");\r",
+											"});\r",
+											"\r",
+											"// 2. Array is not empty\r",
+											"pm.test(\"Array is not empty\", function () {\r",
+											"    pm.expect(json.length).to.be.above(0);\r",
+											"});\r",
+											"\r",
+											"// 3. Validate each item in array\r",
+											"json.forEach((item, index) => {\r",
+											"\r",
+											"    pm.test(`Item ${index}: Required fields present`, function () {\r",
+											"        pm.expect(item).to.have.property(\"_id\");\r",
+											"        pm.expect(item).to.have.property(\"name\");\r",
+											"        pm.expect(item).to.have.property(\"lastName\");\r",
+											"        pm.expect(item).to.have.property(\"phoneNo\");\r",
+											"        pm.expect(item).to.have.property(\"generalImage\");\r",
+											"        pm.expect(item).to.have.property(\"businessInformation\");\r",
+											"        pm.expect(item).to.have.property(\"email\");\r",
+											"        pm.expect(item).to.have.property(\"provider\");\r",
+											"        pm.expect(item).to.have.property(\"createdAt\");\r",
+											"        pm.expect(item).to.have.property(\"updatedAt\");\r",
+											"        pm.expect(item).to.have.property(\"serviceManId\");\r",
+											"    });\r",
+											"\r",
+											"    // 4. Validate businessInformation object\r",
+											"    pm.test(`Item ${index}: businessInformation object valid`, function () {\r",
+											"        pm.expect(item.businessInformation).to.be.an(\"object\");\r",
+											"        pm.expect(item.businessInformation).to.have.property(\"identityType\");\r",
+											"        pm.expect(item.businessInformation).to.have.property(\"identityNumber\");\r",
+											"        pm.expect(item.businessInformation).to.have.property(\"identityImage\");\r",
+											"    });\r",
+											"\r",
+											"    // 5. Field type tests\r",
+											"    pm.test(`Item ${index}: Field types`, function () {\r",
+											"        pm.expect(item.name).to.be.a(\"string\");\r",
+											"        pm.expect(item.lastName).to.be.a(\"string\");\r",
+											"        pm.expect(item.phoneNo).to.be.a(\"string\");\r",
+											"        pm.expect(item.email).to.be.a(\"string\");\r",
+											"        pm.expect(item.generalImage).to.be.a(\"string\");\r",
+											"        pm.expect(item.serviceManId).to.be.a(\"string\");\r",
+											"        pm.expect(item.createdAt).to.be.a(\"string\");\r",
+											"        pm.expect(item.updatedAt).to.be.a(\"string\");\r",
+											"    });\r",
+											"\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api//serviceman/",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"",
+										"serviceman",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "specific serviceman details",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let json = pm.response.json();\r",
+											"\r",
+											"// 1. Status code\r",
+											"pm.test(\"Status code is 200\", () => {\r",
+											"    pm.expect(pm.response.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"// 2. success is true\r",
+											"pm.test(\"Success is true\", () => {\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});\r",
+											"\r",
+											"// 3. data is an object\r",
+											"pm.test(\"data is an object\", () => {\r",
+											"    pm.expect(json.data).to.be.an(\"object\");\r",
+											"});\r",
+											"\r",
+											"// 4. Required fields inside data\r",
+											"pm.test(\"data contains required fields\", () => {\r",
+											"    pm.expect(json.data).to.have.property(\"_id\");\r",
+											"    pm.expect(json.data).to.have.property(\"name\");\r",
+											"    pm.expect(json.data).to.have.property(\"lastName\");\r",
+											"    pm.expect(json.data).to.have.property(\"phoneNo\");\r",
+											"    pm.expect(json.data).to.have.property(\"generalImage\");\r",
+											"    pm.expect(json.data).to.have.property(\"businessInformation\");\r",
+											"});\r",
+											"\r",
+											"// 5. businessInformation object validation\r",
+											"pm.test(\"businessInformation object is valid\", () => {\r",
+											"    pm.expect(json.data.businessInformation).to.be.an(\"object\");\r",
+											"    pm.expect(json.data.businessInformation).to.have.property(\"identityType\");\r",
+											"    pm.expect(json.data.businessInformation).to.have.property(\"identityNumber\");\r",
+											"    pm.expect(json.data.businessInformation).to.have.property(\"identityImage\");\r",
+											"});\r",
+											"\r",
+											"// 6. Type checks\r",
+											"pm.test(\"Field types are valid\", () => {\r",
+											"    pm.expect(json.data.name).to.be.a(\"string\");\r",
+											"    pm.expect(json.data.lastName).to.be.a(\"string\");\r",
+											"    pm.expect(json.data.phoneNo).to.be.a(\"string\");\r",
+											"    pm.expect(json.data.email).to.be.a(\"string\");\r",
+											"    pm.expect(json.data.generalImage).to.be.a(\"string\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api//serviceman/69255480c14f473b372d3359",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"",
+										"serviceman",
+										"69255480c14f473b372d3359"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Assign serviceman",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let res=pm.response;\r",
+											"let json={};\r",
+											"try{\r",
+											"    json=res.json();\r",
+											"}\r",
+											"catch(e){\r",
+											"    console.log(e);\r",
+											"}\r",
+											"pm.test(\"sts check\", ()=>{\r",
+											"    pm.expect(res.code).to.equal(200);\r",
+											"});\r",
+											"pm.test(\"success msg\",()=>{\r",
+											"    pm.expect(json.success).to.equal(true);\r",
+											"});\r",
+											"pm.test(\"header\",()=>{\r",
+											"    pm.expect(res.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"serviceMan\":\"69255480c14f473b372d3359\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/checkout/691c436fcd709f9f1874b03f",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"checkout",
+										"691c436fcd709f9f1874b03f"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update serviceman",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "jayesh",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "bfgbgb",
+											"type": "text"
+										},
+										{
+											"key": "phoneNo",
+											"value": "4444444444",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "dgdg@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "345678",
+											"type": "text"
+										},
+										{
+											"key": "confirmPassword",
+											"value": "345678",
+											"type": "text"
+										},
+										{
+											"key": "identityType",
+											"value": "addharcard",
+											"type": "text"
+										},
+										{
+											"key": "identityNumber",
+											"value": "098765432167",
+											"type": "text"
+										},
+										{
+											"key": "provider",
+											"value": "69258971c14f473b372d9587",
+											"type": "text"
+										},
+										{
+											"key": "generalImage",
+											"type": "file",
+											"src": "/C:/Users/Win/Downloads/Business webinar (4).jpg"
+										},
+										{
+											"key": "identityImage",
+											"type": "file",
+											"src": "/C:/Users/Win/Downloads/Business webinar (4).jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/serviceman/6926a7bfc14f473b372f3e89",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"serviceman",
+										"6926a7bfc14f473b372f3e89"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add serviceman",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "jay",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "patil",
+											"type": "text"
+										},
+										{
+											"key": "phoneNo",
+											"value": "7777777777",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "jay@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "confirmPassword",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "identityType",
+											"value": "addharcard",
+											"type": "text"
+										},
+										{
+											"key": "identityNumber",
+											"value": "593356789878",
+											"type": "text"
+										},
+										{
+											"key": "provider",
+											"value": "6928006ac14f473b373118b3",
+											"type": "text"
+										},
+										{
+											"key": "generalImage",
+											"type": "file",
+											"src": "/C:/Users/Win/Downloads/digital marketing webinar.jpg"
+										},
+										{
+											"key": "identityImage",
+											"type": "file",
+											"src": "/C:/Users/Win/Downloads/On Demand Services banner (1).jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/serviceman",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"serviceman"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Service customer",
+					"item": [
+						{
+							"name": "details serv custom",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://biz-booster.vercel.app/api/service-customer/69269ea4fd77692d61888c94",
+									"protocol": "https",
+									"host": [
+										"biz-booster",
+										"vercel",
+										"app"
+									],
+									"path": [
+										"api",
+										"service-customer",
+										"69269ea4fd77692d61888c94"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add service customer",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// ---------- Random 10 Digit Phone Number ----------\r",
+											"const randomMobile = Math.floor(6000000000 + Math.random() * 4000000000);\r",
+											"pm.environment.set(\"randomMobile\", randomMobile);\r",
+											"\r",
+											"// ---------- Random First Name ----------\r",
+											"const firstNames = [\"Aarav\", \"Vihaan\", \"Aryan\", \"Kabir\", \"Rohan\", \"Sam\", \"Kunal\", \"Rahul\", \"Arjun\", \"Ranveer\"];\r",
+											"const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)];\r",
+											"pm.environment.set(\"firstName\", randomFirstName);\r",
+											"\r",
+											"// ---------- Random Email ----------\r",
+											"const randomNum = Math.floor(Math.random() * 100000);\r",
+											"const randomEmail = `${randomFirstName.toLowerCase()}${randomNum}@test.com`;\r",
+											"pm.environment.set(\"randomEmail\", randomEmail);\r",
+											"console.log({\r",
+											"    phone: randomMobile,\r",
+											"    name: randomFirstName,\r",
+											"    email: randomEmail,\r",
+											"    \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let res=pm.response;\r",
+											"let json={};\r",
+											"try{\r",
+											"    json=res.json();\r",
+											"}catch(e)\r",
+											"{\r",
+											"    console.log(e);\r",
+											"}\r",
+											"pm.test(\"sts code\",()=>{\r",
+											"    pm.expect(res.code).to.be.oneOf([200,201]);\r",
+											"});\r",
+											"pm.test(\"success\",()=>{\r",
+											"    pm.expect(json).to.have.property(\"success\");\r",
+											"    pm.expect(json.success).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});\r",
+											"pm.test(\"data object exist\",()=>{\r",
+											"    pm.expect(json).to.have.property(\"data\");\r",
+											"    pm.expect(json.data).to.be.an(\"object\").and.not.empty;\r",
+											"    pm.expect(json.data.fullName).to.be.an(\"string\").and.not.empty;\r",
+											"    pm.expect(json.data.phone).to.be.an(\"string\").and.not.empty;\r",
+											"    pm.expect(json.data.email).to.be.an(\"string\").and.not.empty;\r",
+											"    //pm.expect(json.data.description).to.be.an(\"string\");\r",
+											"     pm.expect(json.data.description === null || typeof json.data.description === \"string\").to.be.true; \r",
+											"    pm.expect(json.data.address).to.be.an(\"string\").and.not.empty;\r",
+											"    pm.expect(json.data.city).to.be.an(\"string\").and.not.empty;\r",
+											"    pm.expect(json.data.state).to.be.an(\"string\").and.not.empty;\r",
+											"    pm.expect(json.data.country).to.be.an(\"string\").and.not.empty;\r",
+											"\r",
+											"    pm.expect(json.data).to.have.property(\"otp\").and.not.empty;\r",
+											"    pm.expect(json.data.otp).to.be.an(\"object\");\r",
+											"    pm.expect(json.data.otp.verified).to.be.a(\"boolean\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "fullName",
+											"value": "{{$randomFullName}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "{{randomMobile}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "{{randomEmail}}",
+											"type": "text"
+										},
+										{
+											"key": "address",
+											"value": "123, hadpsar, pune",
+											"type": "text"
+										},
+										{
+											"key": "city",
+											"value": "pune",
+											"type": "text"
+										},
+										{
+											"key": "state",
+											"value": "maharashtra",
+											"type": "text"
+										},
+										{
+											"key": "country",
+											"value": "india",
+											"type": "text"
+										},
+										{
+											"key": "user",
+											"value": "6927fe32c14f473b373111df",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://biz-booster.vercel.app/api/service-customer",
+									"protocol": "https",
+									"host": [
+										"biz-booster",
+										"vercel",
+										"app"
+									],
+									"path": [
+										"api",
+										"service-customer"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Checkout",
+					"item": [
+						{
+							"name": "specific booking",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/checkout/",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"checkout",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create lead",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let res=pm.response;\r",
+											"let json={};\r",
+											"try\r",
+											"{\r",
+											"  json=res.json();\r",
+											"}\r",
+											"catch(e)\r",
+											"{\r",
+											"    console.log(e);\r",
+											"}\r",
+											"\r",
+											"pm.test(\"status code\",()=>{\r",
+											"    pm.expect(res.code).to.be.oneOf([200,201]);\r",
+											"});\r",
+											"pm.test(\"success\",()=>{\r",
+											"    pm.expect(json).to.have.property(\"success\");\r",
+											"    pm.expect(json.success).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});\r",
+											"pm.test(\"data object exists\",()=>{\r",
+											"    pm.expect(json).to.have.property(\"data\");\r",
+											"    pm.expect(json.data).to.not.be.empty;\r",
+											"});\r",
+											"pm.test(\"data is string\",()=>{\r",
+											"    pm.expect(json.data).to.have.property(\"user\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"service\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"serviceCustomer\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"provider\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"coupon\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"paymentStatus\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"orderStatus\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"notes\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"bookingId\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"otp\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"createdAt\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"updatedAt\").that.is.a(\"string\").to.not.be.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"data is num\",()=>{\r",
+											"    pm.expect(json.data).to.have.property(\"__v\").that.is.a(\"number\");\r",
+											"    pm.expect(json.data).to.have.property(\"cashInHandAmount\").that.is.a(\"number\");\r",
+											"    pm.expect(json.data).to.have.property(\"remainingAmount\").that.is.a(\"number\");\r",
+											"    pm.expect(json.data).to.have.property(\"paidAmount\").that.is.a(\"number\");\r",
+											"    pm.expect(json.data).to.have.property(\"otherAmount\").that.is.a(\"number\");\r",
+											"    pm.expect(json.data).to.have.property(\"walletAmount\").that.is.a(\"number\");\r",
+											"    pm.expect(json.data).to.have.property(\"grandTotal\").that.is.a(\"number\");\r",
+											"    pm.expect(json.data).to.have.property(\"totalAmount\").that.is.a(\"number\");\r",
+											"    \r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"user\": \"6927fe32c14f473b373111df\",\r\n  \"service\": \"6879edae6f1a199552823f94\",\r\n  \"serviceCustomer\": \"69281f0e818a0992295ac106\",\r\n  \"provider\": \"6928006ac14f473b373118b3\",\r\n  \"coupon\": \"6905a6f2f52e261edc58ddd6\",\"subtotal\": 1000,\r\n  \"serviceDiscount\": 100,\r\n  \"couponDiscount\": 50,\r\n  \"champaignDiscount\": 25,\r\n  \"gst\": 18,\r\n  \"platformFee\": 20,\r\n  \"assurityfee\": 10,\r\n\r\n  \"listingPrice\": 1000.0,\r\n  \"serviceDiscountPrice\": 900.55,\r\n  \"priceAfterDiscount\": 850,\r\n  \"couponDiscountPrice\": 800,\r\n  \"serviceGSTPrice\": 144,\r\n  \"platformFeePrice\": 20,\r\n  \"assurityChargesPrice\": 10,\r\n\r\n  \"totalAmount\": 974,\r\n\r\n  \"termsCondition\": true,\r\n  \"paymentMethod\": \"wallet\",  // or \"cod\"\r\n  \"walletAmount\": 100,\r\n  \"otherAmount\": 200,\r\n  \"paidAmount\": 0,\r\n  \"remainingAmount\": 674,\r\n  \"isPartialPayment\": true,\r\n\r\n  \"paymentStatus\": \"pending\",  // or \"paid\"\r\n  \"orderStatus\": \"processing\",  // or \"confirmed\", \"cancelled\", etc.\r\n  \"notes\": \"Customer requested urgent service\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://biz-booster.vercel.app/api/checkout",
+									"protocol": "https",
+									"host": [
+										"biz-booster",
+										"vercel",
+										"app"
+									],
+									"path": [
+										"api",
+										"checkout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "all bookings details",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/checkout/details/6921aa7cc14f473b372ab906",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"checkout",
+										"details",
+										"6921aa7cc14f473b372ab906"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Accept lead",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let res=pm.response;\r",
+											"let json={};\r",
+											"try{\r",
+											"    json=res.json();\r",
+											"}catch(e){\r",
+											"    console.log(e);\r",
+											"}\r",
+											" pm.test(\"sts check\",()=>{\r",
+											"    pm.expect(res.code).to.equal(200);\r",
+											" });\r",
+											" \r",
+											" pm.test(\"Content-Type is JSON\", () => {\r",
+											"    pm.expect(res.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+											"});\r",
+											"\r",
+											" pm.test(\"Success status should be true\", () => {\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"    pm.expect(json.success).to.be.a(\"boolean\");\r",
+											"});\r",
+											"\r",
+											"  pm.test(\"data\", () => {\r",
+											"    pm.expect(json).to.have.property(\"data\");\r",
+											"    pm.expect(json.data).to.be.an(\"object\").that.is.not.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"String fields validation\", () => {\r",
+											"    const stringFields = [\r",
+											"        \"_id\", \"user\",\"service\",\"serviceCustomer\", \"provider\", \"coupon\", \"paymentStatus\", \"orderStatus\", \"notes\",\"acceptedDate\",\"createdAt\",\"updatedAt\",\"bookingId\",\"otp\"\r",
+											"    ];\r",
+											"\r",
+											"    stringFields.forEach(field => {\r",
+											"        pm.expect(json.data).to.have.property(field);\r",
+											"        pm.expect(json.data[field]).to.be.a(\"string\").and.not.empty;\r",
+											"    });\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"isAccepted\": true,\r\n    \"acceptedDate\":\"2025-10-10T09:13:04.011Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/checkout/692820bf08d282dad1dea5f6",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"checkout",
+										"692820bf08d282dad1dea5f6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update lead status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let res = pm.response;\r",
+											"let json = {};\r",
+											"\r",
+											"try {\r",
+											"    json = res.json();\r",
+											"} catch (e) {\r",
+											"    console.log(\"Response is not JSON:\", e);\r",
+											"}\r",
+											"\r",
+											"// 1. Status code\r",
+											"pm.test(\"Status code is 200\", () => {\r",
+											"    pm.expect(res.code).to.be.oneOf([200,201]);\r",
+											"});\r",
+											"\r",
+											"// 2. Content-Type header\r",
+											"pm.test(\"Content-Type is JSON\", () => {\r",
+											"    pm.expect(res.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"// 3. Success property\r",
+											"pm.test(\"Success is false\", () => {\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_id",
+											"value": "69258971c14f473b372d9587",
+											"type": "text"
+										},
+										{
+											"key": "amount",
+											"value": "5000",
+											"type": "text"
+										},
+										{
+											"key": "checkout",
+											"value": "69259337c14f473b372df1b1",
+											"type": "text"
+										},
+										{
+											"key": "serviceMan",
+											"value": "692593f0c14f473b372df554",
+											"type": "text"
+										},
+										{
+											"key": "document",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "leads",
+											"value": "[\n  {\n    \"statusType\": \"Lead accepted\",\n    \"description\": \"Payment verified 4865 Rs (Full) via Cashfree\",\n     \"zoomLink\": \"\",\n     \"paymentLink\": \"\",\n    \"paymentType\": \"full\"\n  }\n]",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/leads",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"leads"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Lead commission",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"checkoutId\": \"6731eae89b7a2a1d55c9c721\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/distributeLeadCommission",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"distributeLeadCommission"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New Request",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"user\": \"664bf1fdea0d1a913e3cfa83\",\r\n  \"service\": \"684a5ea000abcbee04ee9c38\",\r\n  \"serviceCustomer\": \"684d0af23e4d9ce0720cfc62\",\r\n  \"provider\": \"685d2eee2b8920a2a7d3da57\",\r\n  \"coupon\": \"6849768afe59cc59aea5351c\",\"subtotal\": 1000,\r\n  \"serviceDiscount\": 100,\r\n  \"couponDiscount\": 50,\r\n  \"champaignDiscount\": 25,\r\n  \"gst\": 18,\r\n  \"platformFee\": 20,\r\n  \"assurityfee\": 10,\r\n\r\n  \"listingPrice\": 1000.0,\r\n  \"serviceDiscountPrice\": 900.55,\r\n  \"priceAfterDiscount\": 850,\r\n  \"couponDiscountPrice\": 800,\r\n  \"serviceGSTPrice\": 144,\r\n  \"platformFeePrice\": 20,\r\n  \"assurityChargesPrice\": 10,\r\n\r\n  \"totalAmount\": 974,\r\n\r\n  \"termsCondition\": true,\r\n  \"paymentMethod\": \"wallet\",  // or \"cod\"\r\n  \"walletAmount\": 100,\r\n  \"otherAmount\": 200,\r\n  \"paidAmount\": 300,\r\n  \"remainingAmount\": 674,\r\n  \"isPartialPayment\": true,\r\n\r\n  \"paymentStatus\": \"pending\",  // or \"paid\"\r\n  \"orderStatus\": \"processing\",  // or \"confirmed\", \"cancelled\", etc.\r\n  \"notes\": \"Customer requested urgent service\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://biz-booster.vercel.app/api/checkout",
+									"protocol": "https",
+									"host": [
+										"biz-booster",
+										"vercel",
+										"app"
+									],
+									"path": [
+										"api",
+										"checkout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Leads",
+					"item": [
+						{
+							"name": "lead details",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"let json = {};\r",
+											"\r",
+											"try {\r",
+											"    json = pm.response.json();\r",
+											"} catch (e) {\r",
+											"    console.log(\"Response is not JSON:\", e);\r",
+											"}\r",
+											"\r",
+											"// 1. Status code\r",
+											"pm.test(\"Status code is 200\", () => {\r",
+											"    pm.expect(pm.response.code).to.eql(200);\r",
+											"});\r",
+											"\r",
+											"// 2. Content-Type header\r",
+											"pm.test(\"Content-Type is JSON\", () => {\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"// 3. Success property\r",
+											"pm.test(\"Success is true\", () => {\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});\r",
+											"\r",
+											"// 4. Data is an array\r",
+											"pm.test(\"Data is an array\", () => {\r",
+											"    pm.expect(json.data).to.be.an(\"array\");\r",
+											"    pm.expect(json.data.length).to.be.above(0);\r",
+											"});\r",
+											"\r",
+											"// 5. Loop through each item in the data array\r",
+											"json.data.forEach((item, index) => {\r",
+											"\r",
+											"    // User object\r",
+											"    pm.test(`Item ${index}: User object has required fields`, () => {\r",
+											"        pm.expect(item.user).to.have.property(\"_id\");\r",
+											"        pm.expect(item.user).to.have.property(\"fullName\");\r",
+											"        pm.expect(item.user).to.have.property(\"email\");\r",
+											"        pm.expect(item.user).to.have.property(\"mobileNumber\");\r",
+											"    });\r",
+											"\r",
+											"    // Service object\r",
+											"    pm.test(`Item ${index}: Service object has required fields`, () => {\r",
+											"        pm.expect(item.service).to.have.property(\"_id\");\r",
+											"        pm.expect(item.service).to.have.property(\"serviceName\");\r",
+											"        pm.expect(item.service).to.have.property(\"price\");\r",
+											"        pm.expect(item.service).to.have.property(\"discountedPrice\");\r",
+											"        pm.expect(item.service.franchiseDetails).to.have.property(\"commission\");\r",
+											"    });\r",
+											"\r",
+											"    // Service customer object\r",
+											"    pm.test(`Item ${index}: Service customer has required fields`, () => {\r",
+											"        if (item.serviceCustomer) {\r",
+											"            pm.expect(item.serviceCustomer).to.have.property(\"_id\");\r",
+											"            pm.expect(item.serviceCustomer).to.have.property(\"fullName\");\r",
+											"            pm.expect(item.serviceCustomer).to.have.property(\"email\");\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    // Provider object\r",
+											"    pm.test(`Item ${index}: Provider object has required fields`, () => {\r",
+											"        if (item.provider) {\r",
+											"            pm.expect(item.provider).to.have.property(\"_id\");\r",
+											"            pm.expect(item.provider).to.have.property(\"fullName\");\r",
+											"            pm.expect(item.provider).to.have.property(\"email\");\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    // Payment and order info\r",
+											"    pm.test(`Item ${index}: Payment and order info is valid`, () => {\r",
+											"        pm.expect(item).to.have.property(\"paymentStatus\");\r",
+											"        pm.expect(item).to.have.property(\"orderStatus\");\r",
+											"        pm.expect(item).to.have.property(\"totalAmount\");\r",
+											"        pm.expect(item.paymentMethod).to.be.an(\"array\").that.includes(\"pac\");\r",
+											"    });\r",
+											"\r",
+											"    // Booking info\r",
+											"    pm.test(`Item ${index}: Booking info is valid`, () => {\r",
+											"        pm.expect(item).to.have.property(\"bookingId\");\r",
+											"        pm.expect(item).to.have.property(\"otp\");\r",
+											"        pm.expect(item).to.have.property(\"createdAt\");\r",
+											"        pm.expect(item).to.have.property(\"updatedAt\");\r",
+											"    });\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api//checkout",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"",
+										"checkout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "specific lead details by book id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"let json = {};\r",
+											"\r",
+											"try {\r",
+											"    json = pm.response.json();\r",
+											"} catch (e) {\r",
+											"    console.log(\"Response is not JSON:\", e);\r",
+											"}\r",
+											"\r",
+											"// 1. Status code\r",
+											"pm.test(\"Status code is 200\", () => {\r",
+											"    pm.expect(pm.response.code).to.eql(200);\r",
+											"});\r",
+											"\r",
+											"// 2. Content-Type header\r",
+											"pm.test(\"Content-Type is JSON\", () => {\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"// 3. Success property\r",
+											"pm.test(\"Success is true\", () => {\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});\r",
+											"\r",
+											"// 4. Data object exists\r",
+											"pm.test(\"Data object exists\", () => {\r",
+											"    pm.expect(json.data).to.be.an(\"object\");\r",
+											"});\r",
+											"\r",
+											"// 5. User object inside data\r",
+											"pm.test(\"User object has required fields\", () => {\r",
+											"    pm.expect(json.data.user).to.have.property(\"_id\");\r",
+											"    pm.expect(json.data.user).to.have.property(\"fullName\");\r",
+											"    pm.expect(json.data.user).to.have.property(\"email\");\r",
+											"    pm.expect(json.data.user).to.have.property(\"mobileNumber\");\r",
+											"});\r",
+											"\r",
+											"// 6. Service object inside data\r",
+											"pm.test(\"Service object has required fields\", () => {\r",
+											"    pm.expect(json.data.service).to.have.property(\"_id\");\r",
+											"    pm.expect(json.data.service).to.have.property(\"serviceName\");\r",
+											"    pm.expect(json.data.service).to.have.property(\"price\");\r",
+											"    pm.expect(json.data.service).to.have.property(\"discountedPrice\");\r",
+											"    pm.expect(json.data.service.franchiseDetails).to.have.property(\"commission\");\r",
+											"});\r",
+											"\r",
+											"// 7. Payment info\r",
+											"pm.test(\"Payment and order info is valid\", () => {\r",
+											"    pm.expect(json.data).to.have.property(\"paymentStatus\");\r",
+											"    pm.expect(json.data).to.have.property(\"orderStatus\");\r",
+											"    pm.expect(json.data).to.have.property(\"totalAmount\");\r",
+											"    pm.expect(json.data.paymentMethod).to.include(\"pac\");\r",
+											"});\r",
+											"\r",
+											"// 8. Booking info\r",
+											"pm.test(\"Booking info is valid\", () => {\r",
+											"    pm.expect(json.data).to.have.property(\"bookingId\");\r",
+											"    pm.expect(json.data).to.have.property(\"otp\");\r",
+											"    pm.expect(json.data).to.have.property(\"createdAt\");\r",
+											"    pm.expect(json.data).to.have.property(\"updatedAt\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/checkout/details/6921aa7cc14f473b372ab906",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"checkout",
+										"details",
+										"6921aa7cc14f473b372ab906"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Lead status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"let json = {};\r",
+											"\r",
+											"try {\r",
+											"    json = pm.response.json();\r",
+											"} catch (e) {\r",
+											"    console.log(\"Response is not JSON:\", e);\r",
+											"}\r",
+											"\r",
+											"// 1. Status code\r",
+											"pm.test(\"Status code is 200\", () => {\r",
+											"    pm.expect(pm.response.code).to.eql(200);\r",
+											"});\r",
+											"\r",
+											"// 2. Content-Type header\r",
+											"pm.test(\"Content-Type is JSON\", () => {\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"// 3. Success property\r",
+											"pm.test(\"Success is true\", () => {\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/leads/FindByCheckout/6921aa7cc14f473b372ab906",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"leads",
+										"FindByCheckout",
+										"6921aa7cc14f473b372ab906"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "serviceman",
+					"item": [
+						{
+							"name": "specific serviceman by prov id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let res= pm.response;\r",
+											"let json={};\r",
+											"try\r",
+											"{\r",
+											"    json=res.json();\r",
+											"}\r",
+											"catch(e)\r",
+											"{\r",
+											"    console.log(e);\r",
+											"}\r",
+											"\r",
+											"pm.test(\"status check\", ()=>{\r",
+											"    pm.expect(res.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is present\", function () {\r",
+											"    pm.response.to.have.header(\"Content-Type\");\r",
+											"});\r",
+											"pm.test(\"Success is true\", () => {\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});\r",
+											"\r",
+											"// 4. Data is an array\r",
+											"pm.test(\"Data is an array\", () => {\r",
+											"    pm.expect(json.data).to.be.an(\"array\");\r",
+											"    pm.expect(json).to.have.property(\"data\");\r",
+											"});\r",
+											"//array must be empty\r",
+											"pm.test(\"Array may be empty\", () => {\r",
+											"    pm.expect(json.data.length).to.be.at.least(0);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/serviceman/filterByProvider/691c273ccd709f9f1873d932",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"serviceman",
+										"filterByProvider",
+										"691c273ccd709f9f1873d932"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "serviceman details",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let json = pm.response.json();   // <-- THIS IS THE ONLY json YOU NEED\r",
+											"\r",
+											"pm.test(\"status check\", () => {\r",
+											"    pm.expect(pm.response.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"header\", () => {\r",
+											"    pm.expect(pm.response.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"// 1. Response is an array\r",
+											"pm.test(\"Response is an array\", function () {\r",
+											"    pm.expect(json).to.be.an(\"array\");\r",
+											"});\r",
+											"\r",
+											"// 2. Array is not empty\r",
+											"pm.test(\"Array is not empty\", function () {\r",
+											"    pm.expect(json.length).to.be.above(0);\r",
+											"});\r",
+											"\r",
+											"// 3. Validate each item in array\r",
+											"json.forEach((item, index) => {\r",
+											"\r",
+											"    pm.test(`Item ${index}: Required fields present`, function () {\r",
+											"        pm.expect(item).to.have.property(\"_id\");\r",
+											"        pm.expect(item).to.have.property(\"name\");\r",
+											"        pm.expect(item).to.have.property(\"lastName\");\r",
+											"        pm.expect(item).to.have.property(\"phoneNo\");\r",
+											"        pm.expect(item).to.have.property(\"generalImage\");\r",
+											"        pm.expect(item).to.have.property(\"businessInformation\");\r",
+											"        pm.expect(item).to.have.property(\"email\");\r",
+											"        pm.expect(item).to.have.property(\"provider\");\r",
+											"        pm.expect(item).to.have.property(\"createdAt\");\r",
+											"        pm.expect(item).to.have.property(\"updatedAt\");\r",
+											"        pm.expect(item).to.have.property(\"serviceManId\");\r",
+											"    });\r",
+											"\r",
+											"    // 4. Validate businessInformation object\r",
+											"    pm.test(`Item ${index}: businessInformation object valid`, function () {\r",
+											"        pm.expect(item.businessInformation).to.be.an(\"object\");\r",
+											"        pm.expect(item.businessInformation).to.have.property(\"identityType\");\r",
+											"        pm.expect(item.businessInformation).to.have.property(\"identityNumber\");\r",
+											"        pm.expect(item.businessInformation).to.have.property(\"identityImage\");\r",
+											"    });\r",
+											"\r",
+											"    // 5. Field type tests\r",
+											"    pm.test(`Item ${index}: Field types`, function () {\r",
+											"        pm.expect(item.name).to.be.a(\"string\");\r",
+											"        pm.expect(item.lastName).to.be.a(\"string\");\r",
+											"        pm.expect(item.phoneNo).to.be.a(\"string\");\r",
+											"        pm.expect(item.email).to.be.a(\"string\");\r",
+											"        pm.expect(item.generalImage).to.be.a(\"string\");\r",
+											"        pm.expect(item.serviceManId).to.be.a(\"string\");\r",
+											"        pm.expect(item.createdAt).to.be.a(\"string\");\r",
+											"        pm.expect(item.updatedAt).to.be.a(\"string\");\r",
+											"    });\r",
+											"\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api//serviceman/",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"",
+										"serviceman",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "specific serviceman details",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let json = pm.response.json();\r",
+											"\r",
+											"// 1. Status code\r",
+											"pm.test(\"Status code is 200\", () => {\r",
+											"    pm.expect(pm.response.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"// 2. success is true\r",
+											"pm.test(\"Success is true\", () => {\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});\r",
+											"\r",
+											"// 3. data is an object\r",
+											"pm.test(\"data is an object\", () => {\r",
+											"    pm.expect(json.data).to.be.an(\"object\");\r",
+											"});\r",
+											"\r",
+											"// 4. Required fields inside data\r",
+											"pm.test(\"data contains required fields\", () => {\r",
+											"    pm.expect(json.data).to.have.property(\"_id\");\r",
+											"    pm.expect(json.data).to.have.property(\"name\");\r",
+											"    pm.expect(json.data).to.have.property(\"lastName\");\r",
+											"    pm.expect(json.data).to.have.property(\"phoneNo\");\r",
+											"    pm.expect(json.data).to.have.property(\"generalImage\");\r",
+											"    pm.expect(json.data).to.have.property(\"businessInformation\");\r",
+											"});\r",
+											"\r",
+											"// 5. businessInformation object validation\r",
+											"pm.test(\"businessInformation object is valid\", () => {\r",
+											"    pm.expect(json.data.businessInformation).to.be.an(\"object\");\r",
+											"    pm.expect(json.data.businessInformation).to.have.property(\"identityType\");\r",
+											"    pm.expect(json.data.businessInformation).to.have.property(\"identityNumber\");\r",
+											"    pm.expect(json.data.businessInformation).to.have.property(\"identityImage\");\r",
+											"});\r",
+											"\r",
+											"// 6. Type checks\r",
+											"pm.test(\"Field types are valid\", () => {\r",
+											"    pm.expect(json.data.name).to.be.a(\"string\");\r",
+											"    pm.expect(json.data.lastName).to.be.a(\"string\");\r",
+											"    pm.expect(json.data.phoneNo).to.be.a(\"string\");\r",
+											"    pm.expect(json.data.email).to.be.a(\"string\");\r",
+											"    pm.expect(json.data.generalImage).to.be.a(\"string\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api//serviceman/69255480c14f473b372d3359",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"",
+										"serviceman",
+										"69255480c14f473b372d3359"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Assign serviceman",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let res=pm.response;\r",
+											"let json={};\r",
+											"try{\r",
+											"    json=res.json();\r",
+											"}\r",
+											"catch(e){\r",
+											"    console.log(e);\r",
+											"}\r",
+											"pm.test(\"sts check\", ()=>{\r",
+											"    pm.expect(res.code).to.equal(200);\r",
+											"});\r",
+											"pm.test(\"success msg\",()=>{\r",
+											"    pm.expect(json.success).to.equal(true);\r",
+											"});\r",
+											"pm.test(\"header\",()=>{\r",
+											"    pm.expect(res.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"serviceMan\":\"69255480c14f473b372d3359\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/checkout/691c436fcd709f9f1874b03f",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"checkout",
+										"691c436fcd709f9f1874b03f"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update serviceman",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "jayesh",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "bfgbgb",
+											"type": "text"
+										},
+										{
+											"key": "phoneNo",
+											"value": "4444444444",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "dgdg@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "345678",
+											"type": "text"
+										},
+										{
+											"key": "confirmPassword",
+											"value": "345678",
+											"type": "text"
+										},
+										{
+											"key": "identityType",
+											"value": "addharcard",
+											"type": "text"
+										},
+										{
+											"key": "identityNumber",
+											"value": "098765432167",
+											"type": "text"
+										},
+										{
+											"key": "provider",
+											"value": "69258971c14f473b372d9587",
+											"type": "text"
+										},
+										{
+											"key": "generalImage",
+											"type": "file",
+											"src": "/C:/Users/Win/Downloads/Business webinar (4).jpg"
+										},
+										{
+											"key": "identityImage",
+											"type": "file",
+											"src": "/C:/Users/Win/Downloads/Business webinar (4).jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/serviceman/6926a7bfc14f473b372f3e89",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"serviceman",
+										"6926a7bfc14f473b372f3e89"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add serviceman",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "jay",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "patil",
+											"type": "text"
+										},
+										{
+											"key": "phoneNo",
+											"value": "7777777777",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "jay@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "confirmPassword",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "identityType",
+											"value": "addharcard",
+											"type": "text"
+										},
+										{
+											"key": "identityNumber",
+											"value": "593356789878",
+											"type": "text"
+										},
+										{
+											"key": "provider",
+											"value": "6928006ac14f473b373118b3",
+											"type": "text"
+										},
+										{
+											"key": "generalImage",
+											"type": "file",
+											"src": "/C:/Users/Win/Downloads/digital marketing webinar.jpg"
+										},
+										{
+											"key": "identityImage",
+											"type": "file",
+											"src": "/C:/Users/Win/Downloads/On Demand Services banner (1).jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/serviceman",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"serviceman"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Bank",
+			"item": [
+				{
+					"name": "add bank",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userId\": \"6901a2fbfe2828814fe027d4\",\r\n  \"accountNumber\": \"123456789012\",\r\n  \"ifsc\": \"HDFC0001234\",\r\n  \"bankName\": \"HDFC Bank\",\r\n  \"branchName\": \"Pune Main Branch\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/wallet/add-beneficiary",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"wallet",
+								"add-beneficiary"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bank details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/users/bank-details/68cd3e3c366c9b296274d4ca",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"users",
+								"bank-details",
+								"68cd3e3c366c9b296274d4ca"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reference",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/users/referredby",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"users",
+								"referredby"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Team build",
+			"item": [
+				{
+					"name": "my team",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/team-build/my-team/69117ac40808e0426c154c0f",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"team-build",
+								"my-team",
+								"69117ac40808e0426c154c0f"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Remaining",
+			"item": [
+				{
+					"name": "modules details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://biz-booster.vercel.app/api/modules",
+							"protocol": "https",
+							"host": [
+								"biz-booster",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"modules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "category details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://biz-booster.vercel.app/api/modules",
+							"protocol": "https",
+							"host": [
+								"biz-booster",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"modules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "zone details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://biz-booster.vercel.app/api/zone",
+							"protocol": "https",
+							"host": [
+								"biz-booster",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"zone"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "prov wallet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/provider/wallet/69258971c14f473b372d9587",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"provider",
+								"wallet",
+								"69258971c14f473b372d9587"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Review details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/leads/FindByCheckout/69259337c14f473b372df1b1",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"leads",
+								"FindByCheckout",
+								"69259337c14f473b372df1b1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "download invoice",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/invoice/690352b53a4976d35e869427",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"invoice",
+								"690352b53a4976d35e869427"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "service details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/service",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"service"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cash in hand",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/checkout/cash-in-hand/69146d57d95d55ec7ac56a5f",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"checkout",
+								"cash-in-hand",
+								"69146d57d95d55ec7ac56a5f"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Add on services",
+			"item": [
+				{
+					"name": "add new serv",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"extraService\": [\r\n        {\r\n            \"serviceName\": \"New\",\r\n            \"price\": \"100\",\r\n            \"discount\": \"20\",\r\n            \"total\": \"80\",\r\n            \"commission\": \"0\",\r\n            \"isLeadApproved\": false\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/leads/FindByCheckout/690c6c980808e0426c08b3b2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"leads",
+								"FindByCheckout",
+								"690c6c980808e0426c08b3b2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Advertisement",
+			"item": [
+				{
+					"name": "All details Adv",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let res=pm.response;\r",
+									"let json={};\r",
+									"try{\r",
+									"    json=res.json();\r",
+									"}\r",
+									"catch(e)\r",
+									"{\r",
+									"    console.log(e);\r",
+									"}\r",
+									"pm.test(\"status check\",()=>{\r",
+									"    pm.expect(res.code).to.equal(200);\r",
+									"});\r",
+									"pm.test(\"content headers\",()=>{\r",
+									"    pm.expect(res.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"pm.test(\"success check\",()=>{\r",
+									"    pm.expect(json.success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"array present\",()=>{\r",
+									"    pm.expect(json.data).to.be.an(\"array\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"json.data.forEach((item, index) => {\r",
+									"\r",
+									"    pm.test(`Item ${index}: required fields exist`, function () {\r",
+									"        pm.expect(item).to.have.property(\"_id\");\r",
+									"        pm.expect(item).to.have.property(\"addType\");\r",
+									"        pm.expect(item).to.have.property(\"category\");\r",
+									"        pm.expect(item).to.have.property(\"service\");\r",
+									"        pm.expect(item).to.have.property(\"title\");\r",
+									"        pm.expect(item).to.have.property(\"description\");\r",
+									"        pm.expect(item).to.have.property(\"fileUrl\");\r",
+									"        pm.expect(item).to.have.property(\"startDate\");\r",
+									"        pm.expect(item).to.have.property(\"endDate\");\r",
+									"        pm.expect(item).to.have.property(\"createdAt\");\r",
+									"        pm.expect(item).to.have.property(\"updatedAt\");\r",
+									"    });\r",
+									"\r",
+									"    /* ---------------------------\r",
+									"       CATEGORY OBJECT TEST\r",
+									"    --------------------------- */\r",
+									"\r",
+									"    pm.test(`Item ${index}: Category object valid`, function () {\r",
+									"        pm.expect(item.category).to.be.an(\"object\");\r",
+									"        pm.expect(item.category).to.have.property(\"_id\");\r",
+									"        pm.expect(item.category).to.have.property(\"name\");\r",
+									"        pm.expect(item.category).to.have.property(\"image\");\r",
+									"        pm.expect(item.category).to.have.property(\"module\");\r",
+									"    });\r",
+									"\r",
+									"    /* ---------------------------\r",
+									"       SERVICE OBJECT TEST\r",
+									"    --------------------------- */\r",
+									"\r",
+									"    pm.test(`Item ${index}: Service object valid`, function () {\r",
+									"        pm.expect(item.service).to.be.an(\"object\");\r",
+									"        pm.expect(item.service).to.have.property(\"serviceDetails\");\r",
+									"        pm.expect(item.service).to.have.property(\"franchiseDetails\");\r",
+									"    });\r",
+									"\r",
+									"    /* ---------------------------\r",
+									"       SERVICE DETAILS TEST\r",
+									"    --------------------------- */\r",
+									"\r",
+									"    pm.test(`Item ${index}: serviceDetails valid`, function () {\r",
+									"        let sd = item.service.serviceDetails;\r",
+									"        pm.expect(sd).to.have.property(\"overview\");\r",
+									"        pm.expect(sd).to.have.property(\"benefits\");\r",
+									"        pm.expect(sd).to.have.property(\"howItWorks\");\r",
+									"        pm.expect(sd).to.have.property(\"termsAndConditions\");\r",
+									"        pm.expect(sd).to.have.property(\"document\");\r",
+									"        pm.expect(sd).to.have.property(\"whyChoose\");\r",
+									"        pm.expect(sd).to.have.property(\"faq\");\r",
+									"    });\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/ads",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"ads"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "specific add",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let res=pm.response;\r",
+									"let json={};\r",
+									"try{\r",
+									"    json=res.json();\r",
+									"}catch(e){\r",
+									"    console.log(e);\r",
+									"}\r",
+									"pm.test(\"sts code\",()=>{\r",
+									"    pm.expect(res.code).to.equal(200);\r",
+									"});\r",
+									"pm.test(\"status msg\",()=>{\r",
+									"    pm.expect(json.success).to.be.true;\r",
+									"});\r",
+									"pm.test(\"header\",()=>{\r",
+									"    pm.expect(res.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"pm.test(\"data present\",()=>{\r",
+									"    pm.expect(json.data).to.be.an(\"object\");\r",
+									"});\r",
+									"pm.test(\"Top-level data fields present\", () => {\r",
+									"    const d = json.data;\r",
+									"    pm.expect(d).to.have.property(\"_id\");\r",
+									"    pm.expect(d).to.have.property(\"addType\");\r",
+									"    pm.expect(d).to.have.property(\"category\");\r",
+									"    pm.expect(d).to.have.property(\"service\");\r",
+									"});\r",
+									"\r",
+									"//\r",
+									"// 6. Category object validation\r",
+									"//\r",
+									"pm.test(\"Category object is valid\", () => {\r",
+									"    const category = json.data.category;\r",
+									"\r",
+									"    pm.expect(category).to.be.an(\"object\");\r",
+									"    pm.expect(category).to.have.property(\"_id\");\r",
+									"    pm.expect(category).to.have.property(\"name\");\r",
+									"    pm.expect(category).to.have.property(\"module\");\r",
+									"    pm.expect(category).to.have.property(\"image\");\r",
+									"    pm.expect(category).to.have.property(\"isDeleted\");\r",
+									"    pm.expect(category).to.have.property(\"sortOrder\");\r",
+									"});\r",
+									"\r",
+									"//\r",
+									"// 7. Data types inside category\r",
+									"//\r",
+									"pm.test(\"Category field types correct\", () => {\r",
+									"    const cat = json.data.category;\r",
+									"\r",
+									"    pm.expect(cat._id).to.be.a(\"string\");\r",
+									"    pm.expect(cat.name).to.be.a(\"string\");\r",
+									"    pm.expect(cat.module).to.be.a(\"string\");\r",
+									"    pm.expect(cat.image).to.be.a(\"string\");\r",
+									"    pm.expect(cat.isDeleted).to.be.a(\"boolean\");\r",
+									"    pm.expect(cat.sortOrder).to.be.a(\"number\");\r",
+									"});\r",
+									"\r",
+									"//\r",
+									"// 8. Service object validation\r",
+									"//\r",
+									"pm.test(\"Service object exists\", () => {\r",
+									"    const service = json.data.service;\r",
+									"    pm.expect(service).to.be.an(\"object\");\r",
+									"    pm.expect(service).to.have.property(\"_id\");\r",
+									"    pm.expect(service).to.have.property(\"serviceName\");\r",
+									"    pm.expect(service).to.have.property(\"price\");\r",
+									"    pm.expect(service).to.have.property(\"discount\");\r",
+									"    pm.expect(service).to.have.property(\"discountedPrice\");\r",
+									"});\r",
+									"\r",
+									"//\r",
+									"// 9. Important service type checks\r",
+									"//\r",
+									"pm.test(\"Service fields have correct data types\", () => {\r",
+									"    const s = json.data.service;\r",
+									"    pm.expect(s.serviceName).to.be.a(\"string\");\r",
+									"    pm.expect(s.price).to.be.a(\"number\");\r",
+									"    pm.expect(s.discount).to.be.a(\"number\");\r",
+									"    pm.expect(s.discountedPrice).to.be.a(\"number\");\r",
+									"});\r",
+									"\r",
+									"//\r",
+									"// 10. Start & End Dates\r",
+									"//\r",
+									"pm.test(\"Start and End Dates exist\", () => {\r",
+									"    const d = json.data;\r",
+									"    pm.expect(d.startDate).to.be.a(\"string\");\r",
+									"    pm.expect(d.endDate).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"//\r",
+									"// 11. Boolean flags\r",
+									"//\r",
+									"pm.test(\"Boolean flags are valid\", () => {\r",
+									"    const d = json.data;\r",
+									"    pm.expect(d.isExpired).to.be.a(\"boolean\");\r",
+									"    pm.expect(d.isApproved).to.be.a(\"boolean\");\r",
+									"    pm.expect(d.isDeleted).to.be.a(\"boolean\");\r",
+									"});\r",
+									"\r",
+									"//\r",
+									"// 12. File URL check\r",
+									"//\r",
+									"pm.test(\"File URL is valid string\", () => {\r",
+									"    pm.expect(json.data.fileUrl).to.be.a(\"string\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/ads/690c49313b4877bcde428389",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"ads",
+								"690c49313b4877bcde428389"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get add as prov id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let res=pm.response;\r",
+									"let json={};\r",
+									"try{\r",
+									"    json=res.json();\r",
+									"}\r",
+									"catch(e)\r",
+									"{\r",
+									"    console.log(e);\r",
+									"}\r",
+									"pm.test(\"status check\",()=>{\r",
+									"    pm.expect(res.code).to.equal(200);\r",
+									"});\r",
+									"pm.test(\"content headers\",()=>{\r",
+									"    pm.expect(res.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"pm.test(\"success check\",()=>{\r",
+									"    pm.expect(json.success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"array present\",()=>{\r",
+									"    pm.expect(json.data).to.be.an(\"array\");\r",
+									"});\r",
+									"\r",
+									"json.data.forEach((item, index) => {\r",
+									"\r",
+									"    pm.test(`Item ${index}: required fields exist`, function () {\r",
+									"        pm.expect(item).to.have.property(\"_id\");\r",
+									"        pm.expect(item).to.have.property(\"addType\");\r",
+									"        pm.expect(item).to.have.property(\"category\");\r",
+									"        pm.expect(item).to.have.property(\"service\");\r",
+									"        pm.expect(item).to.have.property(\"title\");\r",
+									"        pm.expect(item).to.have.property(\"description\");\r",
+									"        pm.expect(item).to.have.property(\"fileUrl\");\r",
+									"        pm.expect(item).to.have.property(\"startDate\");\r",
+									"        pm.expect(item).to.have.property(\"endDate\");\r",
+									"        pm.expect(item).to.have.property(\"createdAt\");\r",
+									"        pm.expect(item).to.have.property(\"updatedAt\");\r",
+									"    });\r",
+									"\r",
+									"    /* ---------------------------\r",
+									"       CATEGORY OBJECT TEST\r",
+									"    --------------------------- */\r",
+									"\r",
+									"    pm.test(`Item ${index}: Category object valid`, function () {\r",
+									"        pm.expect(item.category).to.be.an(\"object\");\r",
+									"        pm.expect(item.category).to.have.property(\"_id\");\r",
+									"        pm.expect(item.category).to.have.property(\"name\");\r",
+									"        pm.expect(item.category).to.have.property(\"image\");\r",
+									"        pm.expect(item.category).to.have.property(\"module\");\r",
+									"    });\r",
+									"\r",
+									"    /* ---------------------------\r",
+									"       SERVICE OBJECT TEST\r",
+									"    --------------------------- */\r",
+									"\r",
+									"    pm.test(`Item ${index}: Service object valid`, function () {\r",
+									"        pm.expect(item.service).to.be.an(\"object\");\r",
+									"        pm.expect(item.service).to.have.property(\"serviceDetails\");\r",
+									"        pm.expect(item.service).to.have.property(\"franchiseDetails\");\r",
+									"    });\r",
+									"\r",
+									"    /* ---------------------------\r",
+									"       SERVICE DETAILS TEST\r",
+									"    --------------------------- */\r",
+									"\r",
+									"    pm.test(`Item ${index}: serviceDetails valid`, function () {\r",
+									"        let sd = item.service.serviceDetails;\r",
+									"        pm.expect(sd).to.have.property(\"overview\");\r",
+									"        pm.expect(sd).to.have.property(\"benefits\");\r",
+									"        pm.expect(sd).to.have.property(\"howItWorks\");\r",
+									"        pm.expect(sd).to.have.property(\"termsAndConditions\");\r",
+									"        pm.expect(sd).to.have.property(\"document\");\r",
+									"        pm.expect(sd).to.have.property(\"whyChoose\");\r",
+									"        pm.expect(sd).to.have.property(\"faq\");\r",
+									"    });\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/ads/provider-wise/68cd31ce366c9b296273cf33",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"ads",
+								"provider-wise",
+								"68cd31ce366c9b296273cf33"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete Adv",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let res=pm.response;\r",
+									"let json={};\r",
+									"try{\r",
+									"    json=res.json();\r",
+									"}\r",
+									"catch(e)\r",
+									"{\r",
+									"    console.log(e);\r",
+									"}\r",
+									"pm.test(\"status check\",()=>{\r",
+									"    pm.expect(res.code).to.equal(200);\r",
+									"});\r",
+									"pm.test(\"content headers\",()=>{\r",
+									"    pm.expect(res.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"pm.test(\"success check\",()=>{\r",
+									"    pm.expect(json.success).to.be.true;\r",
+									"});\r",
+									"pm.test(\"data is not null\", () => {\r",
+									"    pm.expect(json.data).to.not.be.null;\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/ads/690832e4cf43abab647119f7",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"ads",
+								"690832e4cf43abab647119f7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create Adv",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/ads?addType&category&subscribedServices&startDate&endDate&title&description&Image",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"ads"
+							],
+							"query": [
+								{
+									"key": "addType",
+									"value": null
+								},
+								{
+									"key": "category",
+									"value": null
+								},
+								{
+									"key": "subscribedServices",
+									"value": null
+								},
+								{
+									"key": "startDate",
+									"value": null
+								},
+								{
+									"key": "endDate",
+									"value": null
+								},
+								{
+									"key": "title",
+									"value": null
+								},
+								{
+									"key": "description",
+									"value": null
+								},
+								{
+									"key": "Image",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "valid register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fullName\": \"chandu chandu\",\r\n  \"email\": \"chandu1@test.com\",\r\n  \"mobileNumber\": \"+919988776655\",\r\n  \"password\": \"Abc@123\",\r\n  \"confirmPassword\": \"Abc@123\",\r\n  \"isAgree\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"emma.watson@example.com\",\r\n  \"password\": \"Emma@2025Pass\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://biz-booster.vercel.app/api/auth/login",
+							"protocol": "https",
+							"host": [
+								"biz-booster",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Banner",
+			"item": [
+				{
+					"name": "banner details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/banner",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"banner"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Academy",
+			"item": []
+		},
+		{
+			"name": "Prov bank",
+			"item": [
+				{
+					"name": "add bank",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"providerId\": \"68cd2f68366c9b296273a23c\",\r\n  \"accountNumber\": \"123456789012\",\r\n  \"ifsc\": \"HDFC0001234\",\r\n  \"bankName\": \"HDFC Bank\",\r\n  \"branchName\": \"Andheri East Branch\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/provider/payout/add-beneficiary",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"provider",
+								"payout",
+								"add-beneficiary"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bank details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/provider/bank-details/68cd2f68366c9b296273a23c",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"provider",
+								"bank-details",
+								"68cd2f68366c9b296273a23c"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
