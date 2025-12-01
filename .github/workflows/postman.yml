@@ -1,0 +1,32 @@
+name: Postman Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Get your code from GitHub
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Install Node.js (your version)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.20.0'
+
+      # Step 3: Install Newman (Postman CLI)
+      - name: Install Newman
+        run: npm install -g newman
+
+      # Step 4: Run your Postman Collection
+      - name: Run Postman Collection
+        run: |
+          echo "🚀 Running API Tests..."
+          newman run Booking.postman_collection.json -e BookingEnv.json
