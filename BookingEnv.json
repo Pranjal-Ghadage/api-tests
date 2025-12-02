@@ -1,0 +1,44 @@
+{
+  "id": "env_id_here",
+  "name": "BookingEnv",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "https://restful-booker.herokuapp.com",
+      "enabled": true,
+      "type": "default",
+      "description": "Points to https://restful-booker.herokuapp.com. All requests using {{baseUrl}} will now resolve."
+    },
+    {
+      "key": "auth_token",
+      "value": "56bb5a9fc55f1be",
+      "enabled": true,
+      "type": "default",
+      "description": "Defined. Can be used in your collection for authentication headers."
+    },
+    {
+      "key": "firstName",
+      "value": "",
+      "enabled": true,
+      "type": "default",
+      "description": "Useful for create/update booking requests."
+    },
+    {
+      "key": "lastName",
+      "value": "",
+      "enabled": true,
+      "type": "default",
+      "description": "Useful for create/update booking requests."
+    },
+    {
+      "key": "bookingid",
+      "value": "",
+      "enabled": true,
+      "type": "default",
+      "description": "Useful for create/update booking requests."
+    }
+  ],
+  "_postman_variable_scope": "environment",
+  "_postman_exported_at": "2025-12-02T00:00:00.000Z",
+  "_postman_exported_using": "Postman/10.0.0"
+}  
